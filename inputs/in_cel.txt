@@ -1,0 +1,130 @@
+BEGIN IMAGE
+
+  type = ppm
+  codification = binary # ascii | binary
+  width = 1000
+  height = 500
+  maxcolor = 255
+  antialiasing = 16
+
+  BEGIN SHADER
+
+    shader = cel #recursive | normal2rgb | standard | depthmap | blinnphong | cel
+    threshold = 10
+    threshold = 20
+    threshold = 30
+    threshold = 40
+    threshold = 50
+    threshold = 60
+    threshold = 70
+    outline_threshold = 80
+
+  END SHADER
+
+  BEGIN CAMERA
+
+    origin = 0.0 0.0 105.0
+    lower_left_corner = -200.0 -100.0 -100.0
+    vertical_axis = 0.0 200.0 0.0
+    horizontal_axis = 400.0 0.0 0.0
+
+  END CAMERA
+
+  BEGIN SCENE
+
+    ambient_light = 1.0 1.0 1.0
+
+    BEGIN BACKGROUND
+
+      lower_left = 1.0 1.0 1.0
+      upper_left = 0.5 0.7 1.0
+      lower_right = 1.0 1.0 1.0
+      upper_right = 0.5 0.7 1.0
+
+    END BACKGROUND
+
+    BEGIN LIGHT
+
+      source = 20.0 10.0 15.0
+      intensity = 1.0 1.0 1.0
+
+    END LIGHT
+
+    BEGIN LIGHT
+
+      source = -20.0 10.0 15.0
+      intensity = 1.0 1.0 1.0
+
+    END LIGHT
+
+    BEGIN OBJECT
+
+      object = sphere
+      center = 0.0 0.0 -1.0
+      radius = 0.5
+
+      BEGIN MATERIAL
+
+        material = cartoon # lambertian | shiny | metal | normal | cartoon
+        albedo = 1.0 0.0 0.0
+        shadow = 0.0 0.0 0.0
+        outline = 0.0 0.0 0.0
+
+      END MATERIAL
+
+    END OBJECT
+
+    BEGIN OBJECT
+
+      object = sphere
+      center = 0.0 -100.5 -1.0
+      radius = 100.0
+
+      BEGIN MATERIAL
+
+        material = cartoon # lambertian | shiny | metal | normal | cartoon
+        albedo = 0.0 1.0 0.0
+        shadow = 0.0 0.0 0.0
+        outline = 0.0 0.0 0.0
+
+      END MATERIAL
+
+      END OBJECT
+
+      BEGIN OBJECT
+
+        object = sphere
+        center = 1.0 0.0 -1.0
+        radius = 0.5
+
+      BEGIN MATERIAL
+
+        material = cartoon # lambertian | shiny | metal | normal | cartoon
+        albedo = 0.0 0.0 1.0
+        shadow = 0.0 0.0 0.0
+        outline = 0.0 0.0 0.0
+
+      END MATERIAL
+
+      END OBJECT
+
+      BEGIN OBJECT
+
+        object = sphere
+        center = -1.0 0.0 -1.0
+        radius = 0.5
+
+        BEGIN MATERIAL
+
+          material = cartoon
+          albedo = 0.0 1.0 1.0
+          shadow = 0.0 0.0 0.0
+          outline = 0.0 0.0 0.0
+
+        END MATERIAL
+
+      END OBJECT
+
+  END SCENE
+
+END IMAGE

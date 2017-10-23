@@ -1,0 +1,121 @@
+BEGIN IMAGE
+
+  type = ppm
+  codification = binary #could be binary
+  width = 1920
+  height = 960
+  maxcolor = 255
+  antialiasing = 1
+
+  BEGIN SHADER
+
+    shader = recursive #recursive | normal2rgb | standard | depthmap | blinnphong | cel
+    iterations = 40
+    ambient = true
+    diffuse = true
+    specular = true
+    shadow = true
+
+  END SHADER
+
+  BEGIN CAMERA
+
+    origin = 0.0 0.0 0.0
+    lower_left_corner = -2.0 -1.0 -1.0
+    vertical_axis = 0.0 2.0 0.0
+    horizontal_axis = 4.0 0.0 0.0
+
+  END CAMERA
+
+  BEGIN SCENE
+
+    ambient_light = 1.0 1.0 1.0
+
+    BEGIN BACKGROUND
+
+      lower_left = 1.0 1.0 1.0
+      upper_left = 0.5 0.7 1.0
+      lower_right = 1.0 1.0 1.0
+      upper_right = 0.5 0.7 1.0
+
+    END BACKGROUND
+
+    BEGIN LIGHT
+
+      source = 0.0 4.0 0.6
+      intensity = 1.0 1.0 1.0
+
+    END LIGHT
+
+    BEGIN OBJECT
+
+      object = sphere
+      center = 0.0 0.0 -1.0
+      radius = 0.5
+
+      BEGIN MATERIAL
+
+        material = lambertian # lambertian | shiny | metal | normal | cartoon
+        ambient = 0.1 0.1 0.1
+        diffuse = 0.8 0.3 0.3
+
+      END MATERIAL
+
+    END OBJECT
+
+    BEGIN OBJECT
+
+      object = sphere
+      center = 0.0 -100.5 -1.0
+      radius = 100.0
+
+      BEGIN MATERIAL
+
+        material = lambertian # lambertian | shiny | metal | normal | cartoon
+        ambient = 0.1 0.1 0.1
+        diffuse = 0.8 0.8 0.0
+
+      END MATERIAL
+
+      END OBJECT
+
+      BEGIN OBJECT
+
+        object = sphere
+        center = 1.0 0.0 -1.0
+        radius = 0.5
+
+      BEGIN MATERIAL
+
+        material = metal # lambertian | shiny | metal | normal | cartoon
+        ambient = 0.1 0.1 0.1
+        diffuse = 0.8 0.6 0.2
+        specular = 1.0 1.0 1.0
+        fuzziness = 1.0
+
+      END MATERIAL
+
+      END OBJECT
+
+
+      BEGIN OBJECT
+
+        object = sphere
+        center = -1.0 0.0 -1.0
+        radius = 0.5
+
+      BEGIN MATERIAL
+
+        material = metal # lambertian | shiny | metal | normal | cartoon
+        ambient = 0.1 0.1 0.1
+        diffuse = 0.8 0.8 0.8
+        specular = 1.0 1.0 1.0
+        fuzziness = 0.3
+
+      END MATERIAL
+
+      END OBJECT
+
+  END SCENE
+
+END IMAGE
