@@ -18,7 +18,7 @@ class Light{
     // Methods
     virtual Vector3 get_direction(const Point3 &new_origin) const = 0;
 
-    bool Shader::is_shadow(const Point3 &new_origin, const Scene &scene, Vector3 &light_direction) const{
+    bool is_shadow(const Point3 &new_origin, const Scene &scene, Vector3 &light_direction){
 
         light_direction = unit_vector(get_direction(new_origin));
         Ray new_ray(new_origin, light_direction);
