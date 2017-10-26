@@ -17,7 +17,10 @@ class Light{
 
     // Methods
     virtual Vector3 get_direction(const Point3 &new_origin) const = 0;
-    virtual Vector3 get_intensity(double ) const = 0;
+    
+    RGB get_intensity(){
+        return intensity;
+    }
 
     bool is_shadow(const Point3 &new_origin, const Scene &scene, Vector3 &light_direction){
 
