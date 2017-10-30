@@ -45,38 +45,48 @@ RGB Cel::shade(const Ray &ray, const Scene &scene) const{
       std::cerr << "not cartoon material" << '\n';
       return RGB(0);
     }
+
     double cos_cam_normal = dot(-ray.get_direction(), rec.normal);
     double cos_outline = std::cos(outline_threshold * M_PI/180);
+
     if(cos_cam_normal > cos_outline){
 
       auto lights = scene.get_lights();
-      Point3 origin = rec.p + rec.normal * 0.01;
+      Point3 new_origin = rec.p + rec.normal * 0.01;
 
       double max_cos = -1;
+
       for(auto light : lights){
-        Vector3 light_direction = unit_vector(light.source - origin);
-        if(is_shadow(Ray(origin, light_direction), scene)){
+        Vector3 light_direction;
+
+        if(light->is_shadow(new_origin, scene, light_direction)){
           rgb_to_paint += cartoon->shadow;
           // rgb_to_paint += RGB(0,1,0);
           continue;
         }
+
         double cos_light_normal = dot(light_direction, rec.normal);
+
         for(double interval : shading_intervals){
 
           double cos_interval = std::cos(interval * M_PI/180);
 
           if(cos_light_normal >= cos_interval){
+
             if(cos_interval > max_cos){
               max_cos = cos_interval;
-              rgb_to_paint = cartoon->albedo * max_cos * light.intensity;
+              rgb_to_paint = cartoon->albedo * max_cos * light->get_intensity();
               break;
             }
+
           }
           else if(interval == shading_intervals[shading_intervals.size()-1]){
+            
             if(cos_interval > max_cos){
               max_cos = cos_interval;
-              rgb_to_paint = cartoon->albedo * max_cos * light.intensity;
+              rgb_to_paint = cartoon->albedo * max_cos * light->intensity;
             }
+
           }
         }
         // rgb_to_paint = RGB(0,1,0) * max_cos * light.intensity;

@@ -28,7 +28,7 @@ class Light{
         Ray new_ray(new_origin, light_direction);
 
         hit_record rec;
-        if(scene.hit_first_object(ray, rec)){
+        if(scene.hit_first_object(new_ray, rec)){
             return true;
         }
         return false;

@@ -58,6 +58,7 @@ void split_string(std::string &str, std::string &delimiter, std::vector< std::st
   }
 }
 
+// Decodes and verifies the output file format 
 bool parse_type(std::vector< std::string > &words, int &type){
   if(words.size() == 3){
     if(words[1] == "="){
@@ -70,6 +71,7 @@ bool parse_type(std::vector< std::string > &words, int &type){
   return false;
 }
 
+// Decodes the output file encoding
 bool parse_codification(std::vector< std::string > &words, int &type){
   if(words.size() == 3){
     if(words[1] == "="){
@@ -85,6 +87,7 @@ bool parse_codification(std::vector< std::string > &words, int &type){
   return false;
 }
 
+// Decodes the width of the image
 bool parse_width(std::vector< std::string > &words, int &width){
   if(words.size() == 3){
     if(words[1] == "="){
@@ -95,6 +98,7 @@ bool parse_width(std::vector< std::string > &words, int &width){
   return false;
 }
 
+// Decodes the height of the image
 bool parse_height(std::vector< std::string > &words, int &height){
   if(words.size() == 3){
     if(words[1] == "="){
@@ -105,6 +109,7 @@ bool parse_height(std::vector< std::string > &words, int &height){
   return false;
 }
 
+// Decodes the maximum color of the image
 bool parse_max_color(std::vector< std::string > &words, int &max_color){
   if(words.size() == 3){
     if(words[1] == "="){
@@ -115,6 +120,7 @@ bool parse_max_color(std::vector< std::string > &words, int &max_color){
   return false;
 }
 
+// Something in the antialiasing
 bool parse_antialiasing(std::vector< std::string > &words, int &antialiasing){
   if(words.size() == 3){
     if(words[1] == "="){
@@ -125,14 +131,19 @@ bool parse_antialiasing(std::vector< std::string > &words, int &antialiasing){
   return false;
 }
 
+
 bool parse_material(Material *&material, std::ifstream &input_file, int &line_number){
+
   RGB ambient, diffuse, specular, albedo;
   RGB shadow_color, outline;
+
   bool is_lambertian, is_shiny, is_metal, is_normal, is_cartoon;
   int specular_exponent = 0;
   double fuzziness = 1.0;
+
   is_cartoon = is_normal = is_metal = is_lambertian = is_shiny = false;
   ambient = diffuse = specular = albedo = shadow_color = outline = RGB(0);
+  
   std::string line = "";
 
   while (std::getline(input_file, line, '\n')) {
@@ -152,6 +163,7 @@ bool parse_material(Material *&material, std::ifstream &input_file, int &line_nu
 
       if(words[1] == "="){
 
+        // Decodes the material
         if(words[0] == "material"){
           if(is_lambertian or is_shiny or is_metal or is_normal or is_cartoon){
             return false;
@@ -176,6 +188,7 @@ bool parse_material(Material *&material, std::ifstream &input_file, int &line_nu
             return false;
           }
         }
+        // Decodes the ambient light
         else if(words[0] == "ambient"){
 
           if(words.size() == 5){
@@ -188,6 +201,7 @@ bool parse_material(Material *&material, std::ifstream &input_file, int &line_nu
             return false;
           }
         }
+        // Decodes the diffuse reflection
         else if(words[0] == "diffuse"){
           if(words.size() == 5){
             double r = std::stod(words[2]);
@@ -199,6 +213,7 @@ bool parse_material(Material *&material, std::ifstream &input_file, int &line_nu
             return false;
           }
         }
+        // Decodes the specular reflection
         else if(words[0] == "specular"){
           if(words.size() == 5){
             double r = std::stod(words[2]);
@@ -210,6 +225,7 @@ bool parse_material(Material *&material, std::ifstream &input_file, int &line_nu
             return false;
           }
         }
+        // Decodes the albedo
         else if(words[0] == "albedo"){
           if(words.size() == 5){
             double r = std::stod(words[2]);
@@ -221,6 +237,7 @@ bool parse_material(Material *&material, std::ifstream &input_file, int &line_nu
             return false;
           }
         }
+        // Decodes the shadow color
         else if(words[0] == "shadow"){
           if(words.size() == 5){
             double r = std::stod(words[2]);
@@ -232,6 +249,7 @@ bool parse_material(Material *&material, std::ifstream &input_file, int &line_nu
             return false;
           }
         }
+        // Decodes the outline
         else if(words[0] == "outline"){
           if(words.size() == 5){
             double r = std::stod(words[2]);
@@ -243,6 +261,7 @@ bool parse_material(Material *&material, std::ifstream &input_file, int &line_nu
             return false;
           }
         }
+        // Decodes the specular exponent
         else if(words[0] == "specular_exponent"){
           if(words.size() == 3){
             specular_exponent = std::stoi(words[2]);
@@ -251,6 +270,7 @@ bool parse_material(Material *&material, std::ifstream &input_file, int &line_nu
             return false;
           }
         }
+        // Decodes the fuzziness
         else if (words[0] == "fuzziness"){
           if (words.size() == 3) {
             fuzziness = std::stod(words[2]);
@@ -263,6 +283,7 @@ bool parse_material(Material *&material, std::ifstream &input_file, int &line_nu
           return false;
         }
       }
+      // Creates the appropriate material
       else if(words[0] == "END"){
         if(is_lambertian){
           material = new Lambertian(ambient, albedo);
@@ -321,6 +342,7 @@ bool parse_object(Hitable *&hitable, std::ifstream &input_file, int &line_number
       split_string(line, delim, words);
 
       if(words[0] == "object"){
+
         if(words.size() == 3 and words[1] == "="){
           if(words[2] == "sphere"){
             is_sphere = true;
@@ -329,9 +351,11 @@ bool parse_object(Hitable *&hitable, std::ifstream &input_file, int &line_number
             return false;
           }
         }
+
       }
 
       else if(words[0] == "center"){
+
         if(words.size() == 5 and words[1] == "="){
           double x = std::stod(words[2]);
           double y = std::stod(words[3]);
@@ -339,21 +363,28 @@ bool parse_object(Hitable *&hitable, std::ifstream &input_file, int &line_number
           center = Point3(x,y,z);
           has_center = true;
         }
+
       }
       else if(words[0] == "radius"){
+        
         if(words.size() == 3 and words[1] == "="){
           radius = std::stod(words[2]);
           has_radius = true;
         }
+
       }
       else if(words[0] == "BEGIN"){
+        
         if(words.size() == 2){
+          
           if(words[1] == "MATERIAL"){
+          
             if(!parse_material(material, input_file, line_number)){
 
               // std::cout << "aqui" << '\n';
               return false;
             }
+            
             has_material = true;
           }
           else{
@@ -365,18 +396,25 @@ bool parse_object(Hitable *&hitable, std::ifstream &input_file, int &line_number
         }
       }
       else if(words[0] == "END"){
+
         if(words.size() == 2){
+          
           if(!has_center or !has_material){
             return false;
           }
+
           if(is_sphere){
+          
             if(!has_radius){
               return false;
             }
+          
             hitable = new Sphere(center, radius, material);
             return (words[1] == "OBJECT") ? true : false;
           }
+
         }
+      
       }
       else{
         return false;
@@ -455,9 +493,14 @@ bool parse_background(Background &background, std::ifstream &input_file, int &li
   return false;
 }
 
-bool parse_light(Light &light, std::ifstream &input_file, int &line_number){
+bool parse_light(Light *&light, std::ifstream &input_file, int &line_number){
   RGB intensity(1);
   Point3 source(0);
+  Vector3 direction(0.0);
+  double angle = 90.0, attenuation = 0.2;
+
+  bool is_pontual, is_directional, is_spotlight;
+  is_pontual = is_directional = is_spotlight = false;
 
   std::string line;
 
@@ -475,27 +518,101 @@ bool parse_light(Light &light, std::ifstream &input_file, int &line_number){
       std::string delim = " ";
 
       split_string(line, delim, words);
-      if(words.size() == 5){
-        if(words[0] == "source"){
-          double x = std::stod(words[2]);
-          double y = std::stod(words[3]);
-          double z = std::stod(words[4]);
-          source = Point3(x,y,z);
-          light.source = source;
+      
+      if(words[1] == "="){
+
+        if (words[0] == "light")
+        {          
+          if (is_spotlight or is_directional or is_pontual)
+          {
+            return false;
+          }
+
+          if (words[2] == "pontual")
+          {
+            is_pontual = true;
+          }
+          else if (words[2] == "directional")
+          {
+            is_directional = true;
+          }
+          else if (words[2] == "spotlight")
+          {
+            is_spotlight = true;
+          }
+          else{
+            return false;
+          }
         }
-        else if(words[0] == "intensity"){
-          double r = std::stod(words[2]);
-          double g = std::stod(words[3]);
-          double b = std::stod(words[4]);
-          intensity = RGB(r,g,b);
-          light.intensity = intensity;
+        else if (words[0] == "intensity")
+        {
+          if (words.size() == 5)
+          {
+            double r = std::stod(words[2]);
+            double g = std::stod(words[3]);
+            double b = std::stod(words[4]);
+            intensity = RGB(r,g,b);
+          }
+          else{
+            return false;
+          }
         }
-        else {
+        else if (words[0] == "source")
+        {
+          if (words.size() == 5)
+          {
+            double x = std::stod(words[2]);
+            double y = std::stod(words[3]);
+            double z = std::stod(words[4]);
+            source = Point3(x,y,z);
+          }
+          else{
+            return false;
+          }
+        }
+        else if (words[0] == "direction")
+        {
+          if (words.size() == 5)
+          {
+            double x = std::stod(words[2]);
+            double y = std::stod(words[3]);
+            double z = std::stod(words[4]);
+            direction = Vector3(x,y,z);
+          }
+          else{
+            return false;
+          }
+        }
+        else if (words[0] == "angle")
+        {
+          angle = std::stod(words[2]);
+        }
+        else if (words[0] == "attenuation")
+        {
+          attenuation = std::stod(words[2]);
+        }
+        else{
           return false;
         }
       }
-      else if(words[0] == "END"){
-        return (words[1] == "LIGHT") ? true : false;
+      else if(words[0] == "END" and words[1] == "LIGHT"){
+
+        if(is_pontual){
+          light = new Pontual(source, intensity);
+        }
+        else if (is_directional)
+        {
+          light = new Directional(direction, intensity);
+        }
+        else if (is_spotlight)
+        {
+          light = new Spotlight(source, direction, angle, attenuation, intensity);
+        }
+        else{
+          return false;
+        }
+
+        return true;
       }
       else{
         return false;
@@ -528,40 +645,52 @@ bool parse_scene(Scene &scene, std::ifstream &input_file, int &line_number){
       std::string delim = " ";
 
       split_string(line, delim, words);
+
       if(words[0] == "BEGIN"){
+
         if(words[1] == "BACKGROUND"){
+
           if(!parse_background(scene.background, input_file, line_number)){
             return false;
           }
-        }
+
+        }                
         else if(words[1] == "LIGHT"){
-          Light light;
+
+          Light *light;
+
           if(!parse_light(light, input_file, line_number)){
             return false;
           }
           else{
             scene.add_light(light);
           }
+
         }
         else if(words[1] == "OBJECT"){
+
           Hitable *object;
+
           if(!parse_object(object, input_file, line_number)){
             return false;
           }
           else{
             scene.add_object(object);
           }
+
         }
         else{
           return false;
         }
       }
       else if(words.size() == 5 and words[0] == "ambient_light" and words[1] == "="){
+
         double r = std::stod(words[2]);
         double g = std::stod(words[3]);
         double b = std::stod(words[4]);
         ambient_light = RGB(r,g,b);
         scene.ambient_light = ambient_light;
+      
       }
       else if(words[0] ==  "END"){
         return (words[1] == "SCENE") ? true : false;
@@ -600,40 +729,52 @@ bool parse_camera(Camera &camera, std::ifstream &input_file, int &line_number){
 
       split_string(line, delim, words);
       if(words.size() == 5 && words[1] == "="){
+
         if(words[0] == "origin"){
+
           double x = std::stod(words[2]);
           double y = std::stod(words[3]);
           double z = std::stod(words[4]);
           origin = Point3(x,y,z);
           has_origin = true;
+
         }
         else if(words[0] == "lower_left_corner"){
+          
           double x = std::stod(words[2]);
           double y = std::stod(words[3]);
           double z = std::stod(words[4]);
           lower_left_corner = Point3(x,y,z);
           has_lower_left_corner = true;
+        
         }
         else if(words[0] == "vertical_axis"){
+          
           double x = std::stod(words[2]);
           double y = std::stod(words[3]);
           double z = std::stod(words[4]);
           vertical_axis = Vector3(x,y,z);
           has_vertical_axis = true;
+
         }
         else if(words[0] == "horizontal_axis"){
+          
           double x = std::stod(words[2]);
           double y = std::stod(words[3]);
           double z = std::stod(words[4]);
           horizontal_axis = Vector3(x,y,z);
           has_horizontal_axis = true;
+
         }
+
       }
       else if(words[0] == "END"){
 
         if(has_origin && has_lower_left_corner && has_horizontal_axis && has_vertical_axis){
+          
           camera = Camera(origin, lower_left_corner, vertical_axis, horizontal_axis);
           return (words[1] == "CAMERA") ? true : false;
+
         }
         return false;
       }
@@ -646,14 +787,17 @@ bool parse_camera(Camera &camera, std::ifstream &input_file, int &line_number){
 }
 
 bool parse_shader(Shader *&shader, std::ifstream &input_file, int &line_number){
+
   bool ambient, diffuse, specular;
   ambient = diffuse = specular = false;
   bool has_shader;
   double max_depth;
+
   shadow = true;
   iterations = 1;
   max_depth = 1.0;
   has_shader = false;
+
   std::vector<int> thresholds;
   int outline_threshold = 85;
   is_blinn_phong = is_depth_map = is_normal_to_rgb = is_recursive = is_standard = is_cel = false;
@@ -678,24 +822,32 @@ bool parse_shader(Shader *&shader, std::ifstream &input_file, int &line_number){
       if(words.size() == 3 && words[1] == "="){
 
         if(words[0] == "ambient"){
-            if(!string_to_bool(words[2], ambient)){
+          
+          if(!string_to_bool(words[2], ambient)){
             return false;
           }
+
         }
         else if(words[0] == "diffuse"){
+          
           if(!string_to_bool(words[2], diffuse)){
             return false;
           }
+
         }
         else if(words[0] == "specular"){
+          
           if(!string_to_bool(words[2], specular)){
             return false;
           }
+
         }
         else if(words[0] == "shadow"){
-            if(!string_to_bool(words[2], shadow)){
+          
+          if(!string_to_bool(words[2], shadow)){
             return false;
           }
+
         }
         else if(words[0] == "iterations"){
           iterations = std::stoi(words[2]);
@@ -852,58 +1004,75 @@ bool parse_image(Image &image, Shader *&shader, std::ifstream &input_file, int &
       split_string(line, delim, words);
 
       if(words[0] == "type"){
+      
         if(!parse_type(words, type)){
           return false;
         }
         has_type = true;
+      
       }
       else if(words[0] == "codification"){
+      
         if(!parse_codification(words, type)){
           return false;
         }
         has_codification = true;
+      
       }
       else if(words[0] == "width"){
+      
         if(!parse_width(words, width)){
           return false;
         }
         has_width = true;
+      
       }
       else if(words[0] == "height"){
+      
         if (!parse_height(words, height)) {
           return false;
         }
         has_height = true;
+      
       }
       else if(words[0] == "maxcolor"){
+        
         if(!parse_max_color(words, max_color)){
           return false;
         }
         has_max_color = true;
+      
       }
       else if(words[0] == "antialiasing"){
-          if(!parse_antialiasing(words, antialiasing)){
-            return false;
-          }
+        if(!parse_antialiasing(words, antialiasing)){
+          return false;
+        }
       }
       else if(words[0] == "BEGIN"){
         if(words[1] == "SCENE"){
+
           if(!parse_scene(scene, input_file, line_number)){
             return false;
           }
+
         }
         else if(words[1] == "SHADER"){
+
           if(!parse_shader(shader, input_file, line_number)){
             return false;
           }
+
         }
         else if(words[1] == "CAMERA"){
+
           if(!parse_camera(camera, input_file, line_number)){
             return false;
           }
+
         }
       }
       else if(words[0] == "END"){
+
         if(has_type && has_width && has_height && has_max_color){
           image = Image(type, max_color, width, height, scene, camera, antialiasing);
           parse_file_name(image, shader);
@@ -912,6 +1081,7 @@ bool parse_image(Image &image, Shader *&shader, std::ifstream &input_file, int &
         else{
           return false;
         }
+
       }
       else{
         return false;

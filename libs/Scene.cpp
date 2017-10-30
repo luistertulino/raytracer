@@ -4,15 +4,7 @@ void Scene::add_object(Hitable * object){
 	objects.push_back(object);
 }
 
-void Scene::add_light(Light &light){
-	lights.push_back(light);
-}
-
-void Scene::add_light(Point3 source_, RGB intensity_){
-	Light light;
-	light.source = source_;
-	light.intensity = intensity_;
-
+void Scene::add_light(Light * light){
 	lights.push_back(light);
 }
 

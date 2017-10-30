@@ -18,9 +18,11 @@ class Pontual : public Light{
     }
   
     // Methods
-    virtual Vector3 get_direction(const Point3 &new_origin) const override;
-}
+    Vector3 get_direction(const Point3 &new_origin) const override;
+};
 
 Vector3 Pontual::get_direction(const Point3 &new_origin) const {
     return source - new_origin;
 }
+
+#endif

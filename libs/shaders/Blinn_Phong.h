@@ -49,18 +49,18 @@ RGB Blinn_Phong::shade(const Ray &ray, const Scene &scene) const {
 
 
     auto lights = scene.get_lights();
-    for (auto light = lights.begin(); light != lights.end(); light++)
+    for (auto light : lights)
     {
 
       Point3 new_origin = rec.p + (rec.normal * Vector3(0.01));
-      Vector3 light_direction = unit_vector(light->source - new_origin);
-      Ray new_ray(new_origin, light_direction);
-      if(!shadows or !is_shadow(new_ray, scene)){
+      Vector3 light_direction;
+
+      if(!shadows or !light->is_shadow(new_origin, scene, light_direction)){
 
         double cos_light_normal = dot(light_direction, rec.normal);
         cos_light_normal = std::max(0.0, cos_light_normal);
 
-        RGB diffuse_intensity = light->intensity * cos_light_normal;
+        RGB diffuse_intensity = light->get_intensity() * cos_light_normal;
 
         rgb_to_paint += rec.material->albedo * diffuse_intensity * use_diffuse;
 
@@ -70,7 +70,7 @@ RGB Blinn_Phong::shade(const Ray &ray, const Scene &scene) const {
           double cos_normal_halfway = dot(rec.normal, halfway_vector);
           cos_normal_halfway = std::max(0.0, cos_normal_halfway);
 
-          RGB shininess_intensity = light->intensity * std::pow(cos_normal_halfway, shiny->specular_exponent);
+          RGB shininess_intensity = light->get_intensity() * std::pow(cos_normal_halfway, shiny->specular_exponent);
 
           rgb_to_paint += shiny->k_s * shininess_intensity * use_specular;
         }

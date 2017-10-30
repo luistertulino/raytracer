@@ -9,6 +9,7 @@
 #include "../libs/Raytrace.h"
 #include "../libs/Image.h"
 #include "../libs/Shader.h"
+#include "../libs/Light.h"
 using namespace utility;
 
 int main(int argc, char const *argv[])
@@ -71,6 +72,7 @@ int main(int argc, char const *argv[])
     Image image;
     Shader *shader;
     clock_t start = clock();
+    
     if(!parser.parse(image, shader)){
       std::cout << "error parsing" << std::endl;
       return -1;

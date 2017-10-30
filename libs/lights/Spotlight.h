@@ -25,7 +25,7 @@ class Spotlight : public Light{
         angle_cos = std::cos(angle * M_PI/180);
         attenuation = 0.5;
     }
-    Spotlight(Point3 &_source, Vector3 &_direction, double _angle, double _attenuation, RGB &_intensity, ) : Light(_intensity){
+    Spotlight(Point3 &_source, Vector3 &_direction, double _angle, double _attenuation, RGB &_intensity) : Light(_intensity){
         source = _source;
         direction = unit_vector(_direction);
         angle = _angle;
@@ -34,10 +34,10 @@ class Spotlight : public Light{
     }
   
     // Methods
-    virtual Vector3 get_direction(const Point3 &new_origin) const override;
+    Vector3 get_direction(const Point3 &new_origin) const override;
     bool is_shadow(const Point3 &new_origin, const Scene &scene, Vector3 &light_direction) const override;
     RGB get_intensity() const override;
-}
+};
 
 Vector3 Spotlight::get_direction(const Point3 &new_origin) const {
     return source - new_origin;
@@ -48,7 +48,7 @@ bool Spotlight::is_shadow(const Point3 &new_origin, const Scene &scene, Vector3 
     Ray new_ray(new_origin, light_direction);
 
     hit_record rec;
-    if(scene.hit_first_object(ray, rec)){
+    if(scene.hit_first_object(new_ray, rec)){
         return true;
     }
 
@@ -63,13 +63,4 @@ RGB get_intensity(){
     return RGB(0.0,0.0,0.0);
 }
 
-
-
-
-
-
-
-
-
-
-
+#endif

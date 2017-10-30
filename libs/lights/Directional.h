@@ -14,13 +14,15 @@ class Directional : public Light{
         direction = Vector3(1.0,1.0,1.0);
     }
     Directional(Vector3 &_direction, RGB &_intensity) : Light(_intensity){
-        source = _source;
+        direction = _direction;
     }
   
     // Methods
-    virtual Vector3 get_direction(const Point3 &new_origin) const override;
-}
+    Vector3 get_direction(const Point3 &new_origin) const override;
+};
 
 Vector3 Direction::get_direction(const Point3 &new_origin) const {
     return direction;
 }
+
+#endif
