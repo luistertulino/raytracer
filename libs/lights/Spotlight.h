@@ -35,7 +35,7 @@ class Spotlight : public Light{
   
     // Methods
     Vector3 get_direction(const Point3 &new_origin) const override;
-    bool is_shadow(const Point3 &new_origin, const Scene &scene, Vector3 &light_direction);
+    //bool is_shadow(const Point3 &new_origin, const Scene &scene, Vector3 &light_direction);
     RGB get_intensity();
 };
 
@@ -43,7 +43,7 @@ Vector3 Spotlight::get_direction(const Point3 &new_origin) const {
     return source - new_origin;
 }
 
-bool Spotlight::is_shadow(const Point3 &new_origin, const Scene &scene, Vector3 &light_direction){
+/*bool Spotlight::is_shadow(const Point3 &new_origin, const Scene &scene, Vector3 &light_direction){
     light_direction = unit_vector(get_direction(new_origin));
     Ray new_ray(new_origin, light_direction);
 
@@ -56,7 +56,7 @@ bool Spotlight::is_shadow(const Point3 &new_origin, const Scene &scene, Vector3 
     
     if(temp_cos < angle_cos) return true;
     return false;
-}
+}*/
 
 RGB Spotlight::get_intensity(){
     if (temp_cos >= angle_cos) return intensity * attenuation * temp_cos;

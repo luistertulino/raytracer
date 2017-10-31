@@ -16,11 +16,11 @@
     }
 
     //Methods
-    virtual RGB shade(const Ray &ray, const Scene &scene) const override; //Override method from Shader.h
+    virtual RGB shade(const Ray &ray, Scene &scene) const override; //Override method from Shader.h
 
   };
 
-  RGB Depth_map::shade(const Ray &ray, const Scene &scene) const{
+  RGB Depth_map::shade(const Ray &ray, Scene &scene) const{
 
     double max_t = std::numeric_limits<double>::max();
     double min_t = 0.0;

@@ -8,11 +8,11 @@
 
     Standard_shader():Shader(){};
 
-    RGB shade(const Ray &ray, const Scene &scene) const override;
+    RGB shade(const Ray &ray, Scene &scene) const override;
 
   };
 
-  RGB Standard_shader::shade(const Ray &ray, const Scene &scene) const {
+  RGB Standard_shader::shade(const Ray &ray, Scene &scene) const {
 
     double max_t = std::numeric_limits<double>::max(); //most distant object
     double min_t = 0.0; //camera distance

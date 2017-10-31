@@ -15,15 +15,15 @@ public:
   Recursive(int iter = 1):Shader(){ iterations = iter;}
 
   //Calls the other shade with iterations
-  RGB shade(const Ray &ray, const Scene &scene) const override;
+  RGB shade(const Ray &ray, Scene &scene) const override;
 
   //Actually gets the color
-  RGB shade(const Ray &ray, const Scene &scene, int actual_iteration) const;
+  RGB shade(const Ray &ray, Scene &scene, int actual_iteration) const;
 
 };
 
   //real color function, with number of iterations
-  RGB Recursive::shade(const Ray &ray, const Scene &scene, int actual_iteration) const {
+  RGB Recursive::shade(const Ray &ray, Scene &scene, int actual_iteration) const {
     double max_t = std::numeric_limits<double>::max();
     double min_t = 0.0;
 
@@ -95,7 +95,7 @@ public:
   }
 
   //calls the real shade function with iterations parameter
-  RGB Recursive::shade(const Ray &ray, const Scene &scene) const {
+  RGB Recursive::shade(const Ray &ray, Scene &scene) const {
 
     return shade(ray, scene, iterations);
   }

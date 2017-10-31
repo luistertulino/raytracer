@@ -8,11 +8,11 @@
 
     Normal_to_RGB():Shader(){};
 
-    RGB shade(const Ray &ray, const Scene &scene) const override;
+    RGB shade(const Ray &ray, Scene &scene) const override;
 
   };
 
-  RGB Normal_to_RGB::shade(const Ray &ray, const Scene &scene) const {
+  RGB Normal_to_RGB::shade(const Ray &ray, Scene &scene) const {
 
     double max_t = std::numeric_limits<double>::max(); //most distant object
     double min_t = 0.0; //camera distance

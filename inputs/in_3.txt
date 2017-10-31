@@ -1,0 +1,246 @@
+BEGIN IMAGE
+
+  type = ppm
+  codification = binary #could be binary
+  width = 600
+  height = 300
+  maxcolor = 255
+  antialiasing = 4
+
+  BEGIN SHADER
+
+    shader = recursive #recursive | normal2rgb | standard | depthmap | blinnphong
+    iterations = 50
+    ambient = true
+    diffuse = true
+    specular = true
+    shadow = true
+
+  END SHADER
+
+  BEGIN CAMERA
+
+    origin = 0.0 0.0 0.0
+    lower_left_corner = -2.0 -1.0 -1.0
+    vertical_axis = 0.0 2.0 0.0
+    horizontal_axis = 4.0 0.0 0.0
+
+  END CAMERA
+
+  BEGIN SCENE
+
+    ambient_light = 1.0 1.0 1.0
+
+    BEGIN BACKGROUND
+
+      lower_left = 0.001 0.001 0.01
+      upper_left = 0.001 0.001 0.01
+      lower_right = 0.001 0.001 0.01
+      upper_right = 0.001 0.001 0.01
+
+    END BACKGROUND
+
+    BEGIN LIGHT
+
+      source = 0.0 0.0 -4.0
+      intensity = 1.0 1.0 1.0
+
+    END LIGHT
+
+    BEGIN OBJECT
+
+      object = sphere
+      center = 0.0 0.0 -1.0
+      radius = 0.5
+
+      BEGIN MATERIAL
+
+        material = metal
+        ambient = 0.1 0.1 0.1
+        diffuse = 0.8  0.8  0.8
+        specular = 1.0 1.0 1.0
+        fuzziness = 1.0
+
+      END MATERIAL
+
+    END OBJECT
+
+    BEGIN OBJECT
+
+      object = sphere
+      center = -1.0 -1.5 1.0
+      radius = 1.5
+
+      BEGIN MATERIAL
+
+        material = lambertian
+        ambient = 0.1 0.1 0.1
+        diffuse = 0.8 0.8 0.0
+
+      END MATERIAL
+
+    END OBJECT
+
+    BEGIN OBJECT
+
+      object = sphere
+      center = 1.0 1.5 1.0
+      radius = 1.666
+
+      BEGIN MATERIAL
+
+        material = lambertian
+        ambient = 0.1 0.1 0.1
+        diffuse = 0.9  0.5  0.2
+
+      END MATERIAL
+
+    END OBJECT
+
+    BEGIN OBJECT
+
+      object = sphere
+      center = 1.0 2.3 -3.0
+      radius = 0.1
+
+      BEGIN MATERIAL
+
+        material = lambertian
+        ambient = 0.1 0.1 0.1
+        diffuse = 1.0 1.0 1.0
+
+      END MATERIAL
+
+    END OBJECT
+
+    BEGIN OBJECT
+
+      object = sphere
+      center = -2.19 2.3 -4.1
+      radius = 0.1
+
+      BEGIN MATERIAL
+
+        material = lambertian
+        ambient = 0.1 0.1 0.1
+        diffuse = 1.0 1.0 1.0
+
+      END MATERIAL
+
+    END OBJECT
+
+    BEGIN OBJECT
+
+      object = sphere
+      center = -0.123 2.3 -1.88
+      radius = 0.1
+
+      BEGIN MATERIAL
+
+        material = lambertian
+        ambient = 0.1 0.1 0.1
+        diffuse = 1.0 1.0 1.0
+
+      END MATERIAL
+
+    END OBJECT
+
+    BEGIN OBJECT
+
+      object = sphere
+      center = -1.4 3.1 -4.0
+      radius = 0.1
+
+      BEGIN MATERIAL
+
+        material = lambertian
+        ambient = 0.1 0.1 0.1
+        diffuse = 1.0 1.0 1.0
+
+      END MATERIAL
+
+    END OBJECT
+
+    BEGIN OBJECT
+
+      object = sphere
+      center = 1.23 23.2 -10.8
+      radius = 0.1
+
+      BEGIN MATERIAL
+
+        material = lambertian
+        ambient = 0.1 0.1 0.1
+        diffuse = 1.0 1.0 1.0
+
+      END MATERIAL
+
+    END OBJECT
+
+    BEGIN OBJECT
+
+      object = sphere
+      center = 8.23 -4.2 -1.8
+      radius = 0.1
+
+      BEGIN MATERIAL
+
+        material = lambertian
+        ambient = 0.1 0.1 0.1
+        diffuse = 1.0 1.0 1.0
+
+      END MATERIAL
+
+    END OBJECT
+
+    BEGIN OBJECT
+
+      object = sphere
+      center = 4.0 3.0 -8.0
+      radius = 0.1
+
+      BEGIN MATERIAL
+
+        material = lambertian
+        ambient = 0.1 0.1 0.1
+        diffuse = 1.0 1.0 1.0
+
+      END MATERIAL
+
+    END OBJECT
+
+    BEGIN OBJECT
+
+      object = sphere
+      center = 3.0 3.2 -22.8
+      radius = 0.3
+
+      BEGIN MATERIAL
+
+        material = lambertian
+        ambient = 0.1 0.1 0.1
+        diffuse = 1.0 1.0 1.0
+
+      END MATERIAL
+
+    END OBJECT
+
+    BEGIN OBJECT
+
+      object = sphere
+      center = 5.0 3.0 -4.8
+      radius = 0.1
+
+      BEGIN MATERIAL
+
+        material = lambertian
+        ambient = 0.1 0.1 0.1
+        diffuse = 1.0 1.0 1.0
+
+      END MATERIAL
+
+    END OBJECT
+
+  END SCENE
+
+END IMAGE

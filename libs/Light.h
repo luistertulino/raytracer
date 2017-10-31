@@ -1,7 +1,6 @@
 #ifndef LIGHT_H_
 #define LIGHT_H_
 #include "utility/Ray.h"
-#include "Scene.h"
 
 class Light{
 
@@ -21,8 +20,6 @@ class Light{
     RGB get_intensity(){
         return intensity;
     }
-
-    bool is_shadow(const Point3 &new_origin, const Scene &scene, Vector3 &light_direction);
 
 };
 

@@ -27,11 +27,11 @@ public:
     outline_threshold = threshold;
    }
 
-  virtual RGB shade(const Ray &ray, const Scene &scene) const override; //Override method from Shader.h
+  virtual RGB shade(const Ray &ray, Scene &scene) const override; //Override method from Shader.h
 
 };
 
-RGB Cel::shade(const Ray &ray, const Scene &scene) const{
+RGB Cel::shade(const Ray &ray, Scene &scene) const{
   double max_t = std::numeric_limits<double>::max();
   double min_t = 0.0;
 
@@ -59,7 +59,7 @@ RGB Cel::shade(const Ray &ray, const Scene &scene) const{
       for(auto light : lights){
         Vector3 light_direction;
 
-        if(light->is_shadow(new_origin, scene, light_direction)){
+        if(scene.is_shadow(new_origin, light, light_direction)){
           rgb_to_paint += cartoon->shadow;
           // rgb_to_paint += RGB(0,1,0);
           continue;
@@ -84,7 +84,7 @@ RGB Cel::shade(const Ray &ray, const Scene &scene) const{
             
             if(cos_interval > max_cos){
               max_cos = cos_interval;
-              rgb_to_paint = cartoon->albedo * max_cos * light->intensity;
+              rgb_to_paint = cartoon->albedo * max_cos * light->get_intensity();
             }
 
           }

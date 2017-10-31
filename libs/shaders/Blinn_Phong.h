@@ -20,11 +20,11 @@ public:
     shadows = shadow;
   };
 
-  RGB shade(const Ray &ray, const Scene &scene) const override;
+  RGB shade(const Ray &ray, Scene &scene) const override;
 
 };
 
-RGB Blinn_Phong::shade(const Ray &ray, const Scene &scene) const {
+RGB Blinn_Phong::shade(const Ray &ray, Scene &scene) const {
   double max_t = std::numeric_limits<double>::max();
   double min_t = 0.0;
 
@@ -55,7 +55,7 @@ RGB Blinn_Phong::shade(const Ray &ray, const Scene &scene) const {
       Point3 new_origin = rec.p + (rec.normal * Vector3(0.01));
       Vector3 light_direction;
 
-      if(!shadows or !light->is_shadow(new_origin, scene, light_direction)){
+      if(!shadows or !scene.is_shadow(new_origin, light, light_direction)){
 
         double cos_light_normal = dot(light_direction, rec.normal);
         cos_light_normal = std::max(0.0, cos_light_normal);

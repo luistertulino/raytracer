@@ -95,6 +95,8 @@ public:
 
 	void add_light(Light * light);
 
+    bool is_shadow(const Point3 &new_origin, Light *light, Vector3 &light_direction);
+
 	bool hit_anything(const Ray & r, double t_min, double t_max, hit_record & rec) const;
 
 	bool hit_first_object(const Ray &r, hit_record & rec) const;

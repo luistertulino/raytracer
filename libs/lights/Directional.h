@@ -19,14 +19,14 @@ class Directional : public Light{
   
     // Methods
     Vector3 get_direction(const Point3 &new_origin) const override;
-    bool is_shadow(const Point3 &new_origin, const Scene &scene, Vector3 &light_direction);
+    //bool is_shadow(const Point3 &new_origin, const Scene &scene, Vector3 &light_direction);
 };
 
 Vector3 Directional::get_direction(const Point3 &new_origin) const {
     return direction;
 }
 
-bool Directional::is_shadow(const Point3 &new_origin, const Scene &scene, Vector3 &light_direction){
+/*bool Directional::is_shadow(const Point3 &new_origin, const Scene &scene, Vector3 &light_direction){
 
     light_direction = unit_vector(get_direction(new_origin));
     Ray new_ray(new_origin, light_direction);
@@ -36,6 +36,6 @@ bool Directional::is_shadow(const Point3 &new_origin, const Scene &scene, Vector
         return true;
     }
     return false;
-}
+}*/
 
 #endif
