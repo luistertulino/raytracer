@@ -521,7 +521,7 @@ bool parse_light(Light *&light, std::ifstream &input_file, int &line_number){
       
       if(words[1] == "="){
 
-        if (words[0] == "light")
+        if (words[0] == "type")
         {          
           if (is_spotlight or is_directional or is_pontual)
           {

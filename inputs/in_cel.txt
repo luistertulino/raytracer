@@ -45,6 +45,7 @@ BEGIN IMAGE
 
     BEGIN LIGHT
 
+      type = pontual
       source = 20.0 10.0 15.0
       intensity = 1.0 1.0 1.0
 
@@ -52,6 +53,7 @@ BEGIN IMAGE
 
     BEGIN LIGHT
 
+      type = pontual
       source = -20.0 10.0 15.0
       intensity = 1.0 1.0 1.0
 
