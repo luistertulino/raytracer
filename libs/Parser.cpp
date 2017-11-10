@@ -5,70 +5,70 @@ bool shadow;
 int iterations;
 
 bool string_to_bool(std::string word, bool &result){
-  if(word == "true"){
-    result = true;
-    return true;
-  }
-  else if(word == "false"){
-    result = false;
-    return true;
-  }
-  else{
-    return false;
-  }
+    if(word == "true"){
+        result = true;
+        return true;
+    }
+    else if(word == "false"){
+        result = false;
+        return true;
+    }
+    else{
+        return false;
+    }
 }
 
 void clean_up(std::string &str){
   // Deletes the comments
-  std::size_t pos = str.find('#');
+    std::size_t pos = str.find('#');
 
-  if(pos != std::string::npos){
-    str = str.substr(0,pos);
-  }
+    if(pos != std::string::npos){
+        str = str.substr(0,pos);
+    }
 
-  if(str.back() == '\r'){
-    str.pop_back();
-  }
+    if(str.back() == '\r'){
+        str.pop_back();
+    }
 }
 
 void split_string(std::string &str, std::string &delimiter, std::vector< std::string > &words){
-  // Splits a string based on a delimiter
+    // Splits a string based on a delimiter
 
-  int i = 0;
-  size_t pos = str.find(delimiter);
-  std::string buff = "";
+    int i = 0;
+    size_t pos = str.find(delimiter);
+    std::string buff = "";
 
-  while (pos != std::string::npos) {
-    buff = str.substr(i,pos-i);
+    while (pos != std::string::npos) {
+        buff = str.substr(i,pos-i);
 
-    if(!buff.empty()){
-      words.push_back(buff);
+        if(!buff.empty()){
+            words.push_back(buff);
+        }
+
+        i = ++pos;
+        pos = str.find(delimiter, pos);
+
+        if (pos == std::string::npos) {
+            buff = str.substr(i,str.length());
+
+            if(!buff.empty()){
+                words.push_back(buff);
+            }
+        }
     }
-
-    i = ++pos;
-    pos = str.find(delimiter, pos);
-
-    if (pos == std::string::npos) {
-      buff = str.substr(i,str.length());
-
-      if(!buff.empty()){
-        words.push_back(buff);
-      }
-    }
-  }
 }
 
 // Decodes and verifies the output file format 
 bool parse_type(std::vector< std::string > &words, int &type){
-  if(words.size() == 3){
-    if(words[1] == "="){
-      if(words[2] == "ppm"){
-        type = 3;
-        return true;
-      }
+    if(words.size() == 3){
+        if(words[1] == "="){
+            if(words[2] == "ppm"){
+                type = 3;
+                return true;
+            }
+        }
     }
-  }
-  return false;
+    return false;
 }
 
 // Decodes the output file encoding
@@ -160,6 +160,8 @@ bool parse_material(Material *&material, std::ifstream &input_file, int &line_nu
       std::string delimiter = " ";
 
       split_string(line, delimiter, words);
+
+      if(words.empty()){continue;}
 
       if(words[1] == "="){
 
@@ -340,6 +342,8 @@ bool parse_object(Hitable *&hitable, std::ifstream &input_file, int &line_number
       std::string delim = " ";
 
       split_string(line, delim, words);
+      
+      if(words.empty()){continue;}
 
       if(words[0] == "object"){
 
@@ -448,6 +452,8 @@ bool parse_background(Background &background, std::ifstream &input_file, int &li
 
       split_string(line, delim, words);
 
+      if(words.empty()){continue;}
+
       if(words.size() == 5 && words[1] == "="){
         if(words[0] == "lower_left"){
           double r = std::stod(words[2]);
@@ -518,6 +524,8 @@ bool parse_light(Light *&light, std::ifstream &input_file, int &line_number){
       std::string delim = " ";
 
       split_string(line, delim, words);
+      
+      if(words.empty()){continue;}
       
       if(words[1] == "="){
 
@@ -646,6 +654,8 @@ bool parse_scene(Scene &scene, std::ifstream &input_file, int &line_number){
 
       split_string(line, delim, words);
 
+      if(words.empty()){continue;}
+
       if(words[0] == "BEGIN"){
 
         if(words[1] == "BACKGROUND"){
@@ -703,87 +713,149 @@ bool parse_scene(Scene &scene, std::ifstream &input_file, int &line_number){
   return false;
 }
 
-bool parse_camera(Camera &camera, std::ifstream &input_file, int &line_number){
-  Point3 origin, lower_left_corner;
-  Vector3 vertical_axis, horizontal_axis;
+bool parse_camera(Camera *&camera, std::ifstream &input_file, int &line_number){
+    Point3 look_from = Point3(0);
+    Vector3 look_at, vp_normal, up;
+    look_at = vp_normal = Vector3(0);
+    up = Vector3(0, 1, 0);
 
-  bool has_origin, has_lower_left_corner;
-  bool has_vertical_axis, has_horizontal_axis;
+    bool is_perspective = false;
+    bool is_parallel = false;
 
-  has_origin = has_vertical_axis = has_horizontal_axis = has_lower_left_corner = false;
+    //parallel arguments
+    Point3 left, right, top, bottom;
+    left = Point3(-1,0,0);
+    right = Point3(1,0,0);
+    top = Point3(0,1,0);
+    bottom = Point3(0,-1,0);
 
-  std::string line;
+    //perspective arguments
+    double vfov = 90;
+    double aspect_ratio = 2;
+    double dist_to_focus = 1;
+    double focal_opening = 90;
 
-  while (std::getline(input_file, line, '\n')) {
-    // std::cout << "CAMERA\n";
-    line_number++;
 
-    clean_up(line);
-    // std::cout << line <<std::endl;
+    std::string line;
 
-    if(!line.empty()){
-
-      std::vector< std::string > words;
-
-      std::string delim = " ";
-
-      split_string(line, delim, words);
-      if(words.size() == 5 && words[1] == "="){
-
-        if(words[0] == "origin"){
-
-          double x = std::stod(words[2]);
-          double y = std::stod(words[3]);
-          double z = std::stod(words[4]);
-          origin = Point3(x,y,z);
-          has_origin = true;
-
-        }
-        else if(words[0] == "lower_left_corner"){
-          
-          double x = std::stod(words[2]);
-          double y = std::stod(words[3]);
-          double z = std::stod(words[4]);
-          lower_left_corner = Point3(x,y,z);
-          has_lower_left_corner = true;
+    while (std::getline(input_file, line, '\n')) {
         
+        line_number++;
+
+        clean_up(line);
+
+        if(!line.empty()){
+
+            std::vector< std::string > words;
+            std::string delim = " ";
+
+            split_string(line, delim, words);
+
+            if(words.empty()){continue;}
+
+            if(words.size() == 5 && words[1] == "="){
+
+                if(words[0] == "look_from"){
+                    double x = std::stod(words[2]);
+                    double y = std::stod(words[3]);
+                    double z = std::stod(words[4]);
+                    look_from = Point3(x,y,z);
+                }
+                else if(words[0] == "look_at"){
+                    double x = std::stod(words[2]);
+                    double y = std::stod(words[3]);
+                    double z = std::stod(words[4]);
+                    look_at = Point3(x,y,z);
+                }
+                else if(words[0] == "up"){
+                    double x = std::stod(words[2]);
+                    double y = std::stod(words[3]);
+                    double z = std::stod(words[4]);
+                    up = Vector3(x,y,z);
+                }
+                else if(words[0] == "vp_normal"){
+                    double x = std::stod(words[2]);
+                    double y = std::stod(words[3]);
+                    double z = std::stod(words[4]);
+                    vp_normal = Vector3(x,y,z);
+                }
+                else if(words[0] == "left"){
+                    double x = std::stod(words[2]);
+                    double y = std::stod(words[3]);
+                    double z = std::stod(words[4]);
+                    left = Vector3(x,y,z);
+                }
+                else if(words[0] == "right"){
+                    double x = std::stod(words[2]);
+                    double y = std::stod(words[3]);
+                    double z = std::stod(words[4]);
+                    right = Vector3(x,y,z);
+                }
+                else if(words[0] == "top"){
+                    double x = std::stod(words[2]);
+                    double y = std::stod(words[3]);
+                    double z = std::stod(words[4]);
+                    top = Vector3(x,y,z);
+                }
+                else if(words[0] == "bottom"){
+                    double x = std::stod(words[2]);
+                    double y = std::stod(words[3]);
+                    double z = std::stod(words[4]);
+                    bottom = Vector3(x,y,z);
+                }
+            }
+            else if (words.size() == 3 && words[1] == "="){
+
+                if(words[0] == "type"){
+
+                    if(is_perspective or is_parallel){
+                      std::cerr << "redefinition of camera type" << '\n';
+                      return false;
+                    }
+
+                    if(words[2] == "perspective"){
+                      is_perspective = true;
+                    }
+                    else if (words[2] == "parallel"){
+                      is_parallel = true;
+                    }
+                    else{
+                      return false;
+                    }
+                }
+                else if (words[0] == "vfov"){
+                    vfov = std::stod(words[2]);
+                }
+                else if (words[0] == "dist_to_focus"){
+                    dist_to_focus = std::stod(words[2]);
+                }
+                else if (words[0] == "aspect_ratio"){
+                    aspect_ratio = std::stod(words[2]);
+                }
+                else if (words[0] == "focal_opening"){
+                    focal_opening = std::stod(words[2]);
+                }
+            }
+            else if(words[0] == "END"){
+
+                if(is_parallel){
+                    camera = new Parallel_Camera(look_from, look_at, up, left, right, bottom, top, vp_normal);
+                }
+                else if(is_perspective){
+                    camera = new Perspective_Camera(look_from, look_at, up, vfov, aspect_ratio, dist_to_focus, focal_opening, vp_normal);
+                }
+                else{
+                    return false;
+                }
+
+                return (words[1] == "CAMERA") ? true : false;
+            }
+            else{
+                return false;
+            }
         }
-        else if(words[0] == "vertical_axis"){
-          
-          double x = std::stod(words[2]);
-          double y = std::stod(words[3]);
-          double z = std::stod(words[4]);
-          vertical_axis = Vector3(x,y,z);
-          has_vertical_axis = true;
-
-        }
-        else if(words[0] == "horizontal_axis"){
-          
-          double x = std::stod(words[2]);
-          double y = std::stod(words[3]);
-          double z = std::stod(words[4]);
-          horizontal_axis = Vector3(x,y,z);
-          has_horizontal_axis = true;
-
-        }
-
-      }
-      else if(words[0] == "END"){
-
-        if(has_origin && has_lower_left_corner && has_horizontal_axis && has_vertical_axis){
-          
-          camera = Camera(origin, lower_left_corner, vertical_axis, horizontal_axis);
-          return (words[1] == "CAMERA") ? true : false;
-
-        }
-        return false;
-      }
-      else{
-        return false;
-      }
     }
-  }
-  return false;
+    return false;
 }
 
 bool parse_shader(Shader *&shader, std::ifstream &input_file, int &line_number){
@@ -818,6 +890,8 @@ bool parse_shader(Shader *&shader, std::ifstream &input_file, int &line_number){
       std::string delim = " ";
 
       split_string(line, delim, words);
+
+      if(words.empty()){continue;}
 
       if(words.size() == 3 && words[1] == "="){
 
@@ -984,7 +1058,7 @@ bool parse_image(Image &image, Shader *&shader, std::ifstream &input_file, int &
   has_type = has_max_color = has_width = has_height = has_codification = false;
 
   Scene scene;
-  Camera camera;
+  Camera *camera;
 
   std::string line;
 
@@ -1002,6 +1076,8 @@ bool parse_image(Image &image, Shader *&shader, std::ifstream &input_file, int &
       std::string delim = " ";
 
       split_string(line, delim, words);
+
+      if(words.empty()){continue;}
 
       if(words[0] == "type"){
       
@@ -1074,8 +1150,10 @@ bool parse_image(Image &image, Shader *&shader, std::ifstream &input_file, int &
       else if(words[0] == "END"){
 
         if(has_type && has_width && has_height && has_max_color){
+
           image = Image(type, max_color, width, height, scene, camera, antialiasing);
           parse_file_name(image, shader);
+
           return (words[1] == "IMAGE") ? true : false;
         }
         else{
@@ -1112,6 +1190,8 @@ bool Parser::parse(Image &image, Shader *&shader){
         std::string delim = " ";
 
         split_string(line, delim, words);
+
+        if(words.empty()){continue;}
 
         //first non empty line must be BEGIN IMAGE
         if(words[0] == "BEGIN" and words[1] == "IMAGE"){

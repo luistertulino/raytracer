@@ -14,13 +14,13 @@ public:
 	int width, height;
 	int antialiasing;
 	Scene scene; //background, list of objects, lights and ambient light;
-	Camera camera;
+	Camera *camera;
 
 	//Constructors
 
 	Image(){}
 
-	Image(int t, int color, int w, int h, Scene &sce, Camera &cam, int a = 1){
+	Image(int t, int color, int w, int h, Scene &sce, Camera *&cam, int a = 1){
 		width = w;
 		height = h;
 		scene = sce;
@@ -39,7 +39,7 @@ public:
 
 	std::string get_name() {return name;}
 
-	Camera get_camera(){return camera;}
+	Camera* get_camera(){return camera;}
 	Scene get_scene(){return scene;}
 	Background get_background(){return scene.get_background();}
 

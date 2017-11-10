@@ -5,6 +5,9 @@
 #include "utility/Ray.h"
 #include "View_Plane.h"
 
+#include <cmath>
+#define M_PI           3.14159265358979323846
+
 struct Frame{
     Vector3 u;
     Vector3 v;
@@ -21,8 +24,8 @@ public:
 	// Constructors
 	Camera(Point3 look_from, Point3 look_at, Vector3 up){
 		frame.w = unit_vector(look_from - look_at);
-	    frame.u = unit_vector(cross(up, w));
-	    frame.v = unit_vector(cross(w,  u));
+	    frame.u = unit_vector(cross(up, frame.w));
+	    frame.v = unit_vector(cross(frame.w,  frame.u));
 
 		origin = look_from;
 	};
@@ -50,16 +53,11 @@ public:
 		return r;
 	}*/
 
-	Ray get_ray(double row, double col, int n_rows, int n_cols); {
-		double u = double(col) / double( n_cols ); // walked u% of the horizontal dimension of the view plane.
-		double v = double(row) / double( n_rows ); // walked v% of the vertical dimension of the view plane.
-
-		return get_ray(u, v);
-	}
+	Ray get_ray(double row, double col, int n_rows, int n_cols);
 
 };
 
-Camera::Ray get_ray(double row, double col, int n_rows, int n_cols){
+Ray Camera::get_ray(double row, double col, int n_rows, int n_cols){
     double u = double(col) / double( n_cols ); // walked u% of the horizontal dimension of the view plane.
     double v = double(row) / double( n_rows ); // walked v% of the vertical dimension of the view plane.
 

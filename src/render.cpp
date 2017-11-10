@@ -104,7 +104,7 @@ int main(int argc, char const *argv[])
 
     std::ofstream output_file(output_file_name, std::ios::out);
     if (output_file.is_open()) {
-      Raytrace my_raytrace(image);
+        Raytrace my_raytrace(image);
 
 
         // Shader *shader = new Standard_shader();
@@ -117,7 +117,7 @@ int main(int argc, char const *argv[])
         my_raytrace.render(output_file, shader);
         std::cout << "time to render/Raytrace: " << (double)(clock() - start)/CLOCKS_PER_SEC << " seconds" << std::endl;
         output_file.close();
-      }
+    }
     else{
       std::cout << "could not open output image file" << std::endl;
     }

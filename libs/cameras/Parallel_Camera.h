@@ -39,3 +39,5 @@ Ray Parallel_Camera::get_ray(double u, double v) const{
 
     return Ray(ray_origin, ray_direction);
 }
+
+#endif
