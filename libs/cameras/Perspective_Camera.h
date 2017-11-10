@@ -1,0 +1,41 @@
+#ifndef _PARALLEL_CAMERA_H_
+#define _PARALLEL_CAMERA_H_
+
+#include "../Camera.h"
+
+class Perspective_Camera : public Camera{
+  public:
+    
+    // Constructors
+    Perspective_Camera(Point3 look_from, Point3 look_at, Point3 up, Point3 left, 
+        Point3 right, Point3 bottom, Point3 top) : Camera(look_from, look_at, up){
+        
+        Vector3 direction;
+        
+        /*if (vp_normal == Vector3(0) ){
+            direction = -frame.w;
+        }
+        else{
+            direction = vp_normal;
+        }*/
+        
+        Vector3 lower_left_corner = origin + left + bottom;
+        Vector3 horizontal_axis = origin + right - left;
+        Vector3 vertical_axis = origin + top - bottom;
+
+        view_plane = View_Plane(lower_left_corner, horizontal_axis, vertical_axis, direction);
+    }
+
+    Ray get_ray(double row, double col, int n_rows, int n_cols){
+        Camera::get_ray(row, col, n_rows, n_cols);
+    }
+
+    Ray get_ray(double u, double v) const override;
+};
+
+Ray Perspective_Camera::get_ray(double u, double v) const{
+    Point3 ray_origin = view_plane.lower_left_corner + u*view_plane.horizontal_axis + v*view_plane.vertical_axis;
+    Vector3 ray_direction = view_plane.normal;
+
+    return Ray(look_from, ray_direction);
+}
