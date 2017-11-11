@@ -67,12 +67,12 @@ BEGIN IMAGE
     BEGIN OBJECT
 
       object = sphere
-      center = 0.0 0.0 -1.0
+      center = 0 0.5 0
       radius = 0.5
 
       BEGIN MATERIAL
 
-        material = metal
+        material = phong
         ambient = 0.1 0.1 0.1
         diffuse = 0.8  0.8  0.8
         specular = 1.0 1.0 1.0
