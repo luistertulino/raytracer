@@ -2,15 +2,15 @@ BEGIN IMAGE
 
   type = ppm
   codification = binary #could be binary
-  width = 600
-  height = 300
+  width = 900
+  height = 450
   maxcolor = 255
   antialiasing = 4
 
   BEGIN SHADER
 
-    shader = recursive #recursive | normal2rgb | standard | depthmap | blinnphong
-    iterations = 50
+    shader = blinnphong #recursive | normal2rgb | standard | depthmap | blinnphong
+    iterations = 1
     ambient = true
     diffuse = true
     specular = true
@@ -20,30 +20,47 @@ BEGIN IMAGE
 
   BEGIN CAMERA
 
-    origin = 0.0 0.0 0.0
-    lower_left_corner = -2.0 -1.0 -1.0
-    vertical_axis = 0.0 2.0 0.0
-    horizontal_axis = 4.0 0.0 0.0
+    type = perspective
+    
+    look_from = 0 15 0.5
+    look_at   = 0 0 0.5
+    up = 0 1 1
+    vp_normal = 0.00 0.00 0.00
+
+    #perspective arguments
+    vfov = 30.0
+    aspect_ratio = 1.33
+    dist_to_focus = 5.0
+    focal_opening = 0
 
   END CAMERA
 
   BEGIN SCENE
 
-    ambient_light = 1.0 1.0 1.0
+    ambient_light = 0.1 0.1 0.1
 
     BEGIN BACKGROUND
 
-      lower_left = 0.001 0.001 0.01
-      upper_left = 0.001 0.001 0.01
-      lower_right = 0.001 0.001 0.01
-      upper_right = 0.001 0.001 0.01
+      lower_left  = 0 0.749 1
+      upper_left  = 0 0.749 1
+      lower_right = 0 0.749 1
+      upper_right = 0 0.749 1
 
     END BACKGROUND
 
     BEGIN LIGHT
 
-      source = 0.0 0.0 -4.0
-      intensity = 1.0 1.0 1.0
+      type = directional
+      direction = -3 3 2
+      intensity = 0.3 0.3 0.7
+
+    END LIGHT
+
+    BEGIN LIGHT
+
+      type = directional
+      direction = 3 3 2
+      intensity = 1 1 0.6
 
     END LIGHT
 

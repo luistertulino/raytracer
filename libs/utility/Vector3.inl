@@ -179,4 +179,16 @@ namespace utility {
       return v;
     }
 
+    inline static Vector3 random_vector_in_unit_disk(){
+      Vector3 v;
+
+      do{
+        double x = std::generate_canonical<double, std::numeric_limits<double>::digits> (random_generator);
+        double y = std::generate_canonical<double, std::numeric_limits<double>::digits> (random_generator);
+        v = 2 * Vector3(x,y,0) - Vector3(1,1,0);
+      } while(dot(v,v) >= 1.0);
+
+      return v;
+    }
+
 } // namespace utility
