@@ -22,14 +22,13 @@ BEGIN IMAGE
 
     type = perspective
     
-    look_from = 0 15 0.5
-    look_at   = 0 0 0.5
-    up = 0 1 1
-    vp_normal = 0.00 0.00 0.00
+    look_from = 7.0 2.0 5.0
+    look_at   = 0.0 0.0 -1.0
+    up = 0.0 1.0 0.0
+    #vp_normal = 0.00 0.00 0.00
 
     #perspective arguments
     vfov = 30.0
-    aspect_ratio = 1.33
     dist_to_focus = 5.0
     focal_opening = 0
 
@@ -41,51 +40,33 @@ BEGIN IMAGE
 
     BEGIN BACKGROUND
 
-      lower_left  = 0 0.749 1
-      upper_left  = 0 0.749 1
-      lower_right = 0 0.749 1
-      upper_right = 0 0.749 1
+      lower_left  = 0 0 0
+      upper_left  = 0.5 0.5 0.5
+      lower_right = 0 0 0
+      upper_right = 0.5 0.5 0.5
 
     END BACKGROUND
 
     BEGIN LIGHT
 
-      type = directional
-      direction = -3 3 2
-      intensity = 0.3 0.3 0.7
+      type = pontual
+      source = 0 1.1 -1
+      intensity = 1.0 0.65 0.0
 
     END LIGHT
 
     BEGIN LIGHT
 
       type = directional
-      direction = 3 3 2
-      intensity = 1 1 0.6
+      direction = 1.0 1.5 2.0
+      intensity = 1.0 0.65 0.0
 
     END LIGHT
 
     BEGIN OBJECT
 
       object = sphere
-      center = 0 0.5 0
-      radius = 0.5
-
-      BEGIN MATERIAL
-
-        material = shiny
-        ambient = 0.1 0.1 0.1
-        diffuse = 0.9  0.2  0.8
-        specular = 0.8 0.8 0.8
-        fuzziness = 256.0
-
-      END MATERIAL
-
-    END OBJECT
-
-    BEGIN OBJECT
-
-      object = sphere
-      center = 0.5 0.5 -1
+      center = 0 0 0
       radius = 0.5
 
       BEGIN MATERIAL
@@ -94,7 +75,7 @@ BEGIN IMAGE
         ambient = 0.1 0.1 0.1
         diffuse = 0.2 0.9 0.2
         specular = 0.8 0.8 0.8
-        fuzziness = 256.0
+        specular_exponent = 256.0
 
       END MATERIAL
 
@@ -103,7 +84,25 @@ BEGIN IMAGE
     BEGIN OBJECT
 
       object = sphere
-      center = 1 0.5 -2
+      center = -0.86 0 -1.5
+      radius = 0.5
+
+      BEGIN MATERIAL
+
+        material = shiny
+        ambient = 0.1 0.1 0.1
+        diffuse = 0.9 0.2 0.1
+        specular = 0.8 0.8 0.8
+        specular_exponent = 256.0
+
+      END MATERIAL
+
+    END OBJECT
+
+    BEGIN OBJECT
+
+      object = sphere
+      center = 0.86 0 -1.5
       radius = 0.5
 
       BEGIN MATERIAL
@@ -112,7 +111,7 @@ BEGIN IMAGE
         ambient = 0.1 0.1 0.1
         diffuse = 0.1 0.2 0.9
         specular = 0.8 0.8 0.6
-        fuzziness = 256.0
+        specular_exponent = 256.0
 
       END MATERIAL
 
@@ -121,52 +120,16 @@ BEGIN IMAGE
     BEGIN OBJECT
 
       object = sphere
-      center = -0.5 0.5 1
-      radius = 0.5
+      center = 0 -1000.5 -1
+      radius = 1000.0
 
       BEGIN MATERIAL
 
         material = shiny
         ambient = 0.1 0.1 0.1
-        diffuse = 0.2 1.0 1.0
-        specular = 0.8 0.8 0.6
-        fuzziness = 256.0	
-
-      END MATERIAL
-
-    END OBJECT
-
-    BEGIN OBJECT
-
-      object = sphere
-      center = -1 0.5 2
-      radius = 0.5
-
-      BEGIN MATERIAL
-
-        material = shiny
-        ambient = 0.1 0.1 0.1
-        diffuse = 1.0 0.2 1.0
-        specular = 0.8 0.8 0.6
-        fuzziness = 256.0
-
-      END MATERIAL
-
-    END OBJECT
-
-    BEGIN OBJECT
-
-      object = sphere
-      center = -1.5 0.5 3
-      radius = 0.5
-
-      BEGIN MATERIAL
-
-        material = shiny
-        ambient = 0.1 0.1 0.1
-        diffuse = 1.0 1.0 0.2
-        specular = 0.8 0.8 0.6
-        fuzziness = 256.0
+        diffuse = 0.8 0.8 0.8
+        specular = 0.0 0.0 0.0
+        specular_exponent = 8.0	
 
       END MATERIAL
 
