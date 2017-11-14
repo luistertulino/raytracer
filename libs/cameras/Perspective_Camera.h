@@ -23,7 +23,7 @@ class Perspective_Camera : public Camera{
         distance_to_vp = vp_center.length();
 
         double theta = vfov * M_PI / 180;
-        double half_height = distance_to_vp / std::tan(theta/2);
+        double half_height = distance_to_vp * std::tan(theta/2);
         double half_width = aspect_ratio * half_height;
 
         Vector3 direction = vp_normal;
@@ -53,8 +53,6 @@ Ray Perspective_Camera::get_ray(double u, double v) const {
 
     if(focal_opening > 0){
         Vector3 sample = (random_vector_in_unit_disk()) * focal_opening;
-
-        //double focal_target = -(focal_distance + origin.z()) / target.z();
 
         Point3 focus_point = r.point_at(focal_distance);
 
