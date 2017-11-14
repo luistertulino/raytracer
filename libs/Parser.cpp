@@ -3,6 +3,8 @@
 bool is_blinn_phong, is_depth_map, is_normal_to_rgb, is_recursive, is_standard, is_cel;
 bool shadow;
 int iterations;
+bool is_parallel, is_perspective;
+int num_spheres = 0;
 
 bool string_to_bool(std::string word, bool &result){
     if(word == "true"){
@@ -292,13 +294,6 @@ bool parse_material(Material *&material, std::ifstream &input_file, int &line_nu
         }
         else if(is_shiny){
           material = new Shiny(ambient, diffuse, specular, specular_exponent);
-
-          Shiny *sh = dynamic_cast<Shiny*>(material);
-
-          std::cout << "ambiente: " << sh->k_a.r() << " " << sh->k_a.g() << " " << sh->k_a.b() << std::endl;
-          std::cout << "diffuse: " << sh->k_d.r() << " " << sh->k_d.g() << " " << sh->k_d.b() << std::endl;
-          std::cout << "specular: " << sh->k_s.r() << " " << sh->k_s.g() << " " << sh->k_s.b() << std::endl;
-          std::cout << "expoente especular: " << sh->specular_exponent << std::endl;
         }
         else if (is_metal){
           material = new Metal(albedo, fuzziness);
@@ -421,6 +416,8 @@ bool parse_object(Hitable *&hitable, std::ifstream &input_file, int &line_number
             }
           
             hitable = new Sphere(center, radius, material);
+            num_spheres++;
+
             return (words[1] == "OBJECT") ? true : false;
           }
 
@@ -508,7 +505,7 @@ bool parse_background(Background &background, std::ifstream &input_file, int &li
 
 bool parse_light(Light *&light, std::ifstream &input_file, int &line_number){
   RGB intensity(1);
-  Point3 source(0);
+  Point3 source(0), destination(0.0);
   Vector3 direction(0.0);
   double angle = 90.0, attenuation = 1.0;
 
@@ -598,6 +595,19 @@ bool parse_light(Light *&light, std::ifstream &input_file, int &line_number){
             return false;
           }
         }
+        else if (words[0] == "destination")
+        {
+          if (words.size() == 5)
+          {
+            double x = std::stod(words[2]);
+            double y = std::stod(words[3]);
+            double z = std::stod(words[4]);
+            destination = Point3(x,y,z);
+          }
+          else{
+            return false;
+          }
+        }
         else if (words[0] == "angle")
         {
           angle = std::stod(words[2]);
@@ -613,10 +623,7 @@ bool parse_light(Light *&light, std::ifstream &input_file, int &line_number){
       else if(words[0] == "END" and words[1] == "LIGHT"){
 
         if(is_pontual){
-          light = new Pontual(source, intensity);
-          /*Pontual *p = dynamic_cast<Pontual*>(light);
-          std::cout << "source: " << p->source.x() << " " << p->source.y() << " " << p->source.z() << std::endl;
-          std::cout << "intensity: " << p->intensity.x() << " " << p->intensity.y() << " " << p->intensity.z() << std::endl;*/
+          light = new Pontual(source, intensity);          
         }
         else if (is_directional)
         {
@@ -624,7 +631,7 @@ bool parse_light(Light *&light, std::ifstream &input_file, int &line_number){
         }
         else if (is_spotlight)
         {
-          light = new Spotlight(source, direction, angle, attenuation, intensity);
+          light = new Spotlight(source, destination, angle, attenuation, intensity);
         }
         else{
           return false;
@@ -729,8 +736,8 @@ bool parse_camera(Camera *&camera, std::ifstream &input_file, int &line_number){
     look_at = vp_normal = Vector3(0);
     up = Vector3(0, 1, 0);
 
-    bool is_perspective = false;
-    bool is_parallel = false;
+    is_perspective = false;
+    is_parallel = false;
 
     // parallel arguments
     Point3 left, right, top, bottom;
@@ -1015,8 +1022,9 @@ void parse_file_name(Image &image, Shader *shader){
   output_file_name += "{P" + std::to_string(image.get_type())+"}_";
   output_file_name += "{" + std::to_string(image.get_width()) + "x" + std::to_string(image.get_height()) + "}_";
   output_file_name += "{" + std::to_string(image.get_antialiasing()) + "x}_";
+  
   std::string shader_name = "";
-
+  
   if(is_blinn_phong){
     Blinn_Phong *bp = dynamic_cast<Blinn_Phong*>(shader);
 
@@ -1054,6 +1062,33 @@ void parse_file_name(Image &image, Shader *shader){
   }
 
   output_file_name += "{" + shader_name + "}_";
+
+  std::string camera_name = "";
+
+  Camera *camera = image.get_camera();
+  if(is_perspective){ 
+    camera_name += "Perspective_";
+    if(camera->is_orthogonal){
+        camera_name += "Orthogonal";
+    }
+    else{ camera_name += "Oblique"; }
+  }
+  else if(is_parallel){
+    camera_name += "Perspective_";
+    if(camera->is_orthogonal){
+        camera_name += "Orthogonal";
+    }
+    else{ camera_name += "Oblique"; }
+  }
+
+  output_file_name += "{" + camera_name + "}_";
+
+  std::string objects = "Objects = ";
+  
+  if(num_spheres > 0){
+    objects += std::to_string(num_spheres) + " spheres";
+  }
+  output_file_name += "{" + objects + "}_";
 
   image.set_file_name(output_file_name);
 

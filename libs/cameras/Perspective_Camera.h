@@ -27,8 +27,10 @@ class Perspective_Camera : public Camera{
         double half_width = aspect_ratio * half_height;
 
         Vector3 direction = vp_normal;
+        
         if (vp_normal == Vector3(0)){
             direction = unit_vector(-frame.w);
+            is_orthogonal = true;
         }
 
         Vector3 lower_left_corner = origin + direction*distance_to_vp - half_width*frame.u - half_height*frame.v;

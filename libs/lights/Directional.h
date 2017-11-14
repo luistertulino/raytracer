@@ -23,19 +23,7 @@ class Directional : public Light{
 };
 
 Vector3 Directional::get_direction(const Point3 &new_origin) const {
-    return -direction;
+    return direction;
 }
-
-/*bool Directional::is_shadow(const Point3 &new_origin, const Scene &scene, Vector3 &light_direction){
-
-    light_direction = unit_vector(get_direction(new_origin));
-    Ray new_ray(new_origin, light_direction);
-
-    hit_record rec;
-    if(scene.hit_first_object(new_ray, rec)){
-        return true;
-    }
-    return false;
-}*/
 
 #endif

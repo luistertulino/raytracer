@@ -21,6 +21,8 @@ public:
 	View_Plane view_plane;
     Frame frame;
 
+    bool is_orthogonal;
+
 	// Constructors
 	Camera(Point3 look_from, Point3 look_at, Vector3 up){
 		frame.w = unit_vector(look_from - look_at);
@@ -28,6 +30,8 @@ public:
 	    frame.v = unit_vector(cross(frame.w,  frame.u));
 
 		origin = look_from;
+
+        is_orthogonal = false;
 	};
 
 

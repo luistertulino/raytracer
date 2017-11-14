@@ -14,6 +14,7 @@ class Parallel_Camera : public Camera{
         
         if (vp_normal == Vector3(0) ){//and vp_normal.Y == 0.00 ){and vp_normal.Z == 0.00 ){
             direction = -frame.w;
+            is_orthogonal = true;
         }
         else{
             direction = vp_normal;

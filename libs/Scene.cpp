@@ -22,11 +22,14 @@ bool Scene::is_shadow(const Point3 &new_origin, Light *light, Vector3 &light_dir
 
     if(spotlight != nullptr){
 
-        spotlight->temp_cos = dot(spotlight->direction, light_direction);
+        spotlight->cos_ray_direction = dot(spotlight->direction, -light_direction);
+        //double temp_cos = dot(spotlight->direction, -light_direction);
 
         *light = *spotlight;
+
+        //std::cout << "Temp_cos = " << spotlight->temp_cos << " Angle_cos = " << spotlight->angle_cos << std::endl;
         
-        if(spotlight->temp_cos < spotlight->angle_cos) return true;
+        if(spotlight->cos_ray_direction <= spotlight->angle_cos) return true;
     }
     return false;
 }
