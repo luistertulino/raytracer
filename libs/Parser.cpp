@@ -292,6 +292,13 @@ bool parse_material(Material *&material, std::ifstream &input_file, int &line_nu
         }
         else if(is_shiny){
           material = new Shiny(ambient, diffuse, specular, specular_exponent);
+
+          Shiny *sh = dynamic_cast<Shiny*>(material);
+
+          std::cout << "ambiente: " << sh->k_a.r() << " " << sh->k_a.g() << " " << sh->k_a.b() << std::endl;
+          std::cout << "diffuse: " << sh->k_d.r() << " " << sh->k_d.g() << " " << sh->k_d.b() << std::endl;
+          std::cout << "specular: " << sh->k_s.r() << " " << sh->k_s.g() << " " << sh->k_s.b() << std::endl;
+          std::cout << "expoente especular: " << sh->specular_exponent << std::endl;
         }
         else if (is_metal){
           material = new Metal(albedo, fuzziness);
@@ -503,7 +510,7 @@ bool parse_light(Light *&light, std::ifstream &input_file, int &line_number){
   RGB intensity(1);
   Point3 source(0);
   Vector3 direction(0.0);
-  double angle = 90.0, attenuation = 0.2;
+  double angle = 90.0, attenuation = 1.0;
 
   bool is_pontual, is_directional, is_spotlight;
   is_pontual = is_directional = is_spotlight = false;
@@ -607,6 +614,9 @@ bool parse_light(Light *&light, std::ifstream &input_file, int &line_number){
 
         if(is_pontual){
           light = new Pontual(source, intensity);
+          /*Pontual *p = dynamic_cast<Pontual*>(light);
+          std::cout << "source: " << p->source.x() << " " << p->source.y() << " " << p->source.z() << std::endl;
+          std::cout << "intensity: " << p->intensity.x() << " " << p->intensity.y() << " " << p->intensity.z() << std::endl;*/
         }
         else if (is_directional)
         {

@@ -15,8 +15,8 @@ public:
   Blinn_Phong():Shader(){};
   Blinn_Phong(bool amb, bool diff, bool spec, bool shadow = true):Shader(){
     use_ambient = amb ? 1.0 : 0.0;
-    use_ambient = diff ? 1.0 : 0.0;
-    use_ambient = spec ? 1.0 : 0.0;
+    use_diffuse = diff ? 1.0 : 0.0;
+    use_specular = spec ? 1.0 : 0.0;
     shadows = shadow;
   };
 

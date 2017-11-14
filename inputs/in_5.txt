@@ -22,7 +22,7 @@ BEGIN IMAGE
 
     type = perspective
     
-    look_from = 7.0 2.0 5.0
+    look_from = 9 3.5 15
     look_at   = 0.0 0.0 -1.0
     up = 0.0 1.0 0.0
     #vp_normal = 0.00 0.00 0.00
@@ -49,16 +49,38 @@ BEGIN IMAGE
 
     BEGIN LIGHT
 
-      type = pontual
-      source = 0 1.1 -1
-      intensity = 0.7 0.7 0.7
+      type = spotlight
+      source = 0 1 2.0
+      direction = 0 0 -2.0
+      intensity = 0.3 0.9 0.3
+      angle = 15
+
+    END LIGHT
+
+    BEGIN LIGHT
+
+      type = spotlight
+      source = 0 4 -2.0
+      direction = -4 0 -2.0
+      intensity = 0.7 0.2 0.2
+      angle = 18
+
+    END LIGHT
+
+    BEGIN LIGHT
+
+      type = spotlight
+      source = 0 4 -2.0
+      direction = 4 0 -2.0
+      intensity = 0.2 0.2 0.7
+      angle = 18
 
     END LIGHT
 
     BEGIN OBJECT
 
       object = sphere
-      center = 0 0 0
+      center = 0 0 -2
       radius = 0.5
 
       BEGIN MATERIAL
@@ -76,7 +98,7 @@ BEGIN IMAGE
     BEGIN OBJECT
 
       object = sphere
-      center = -0.86 0 -1.5
+      center = -4 0 -2
       radius = 0.5
 
       BEGIN MATERIAL
@@ -94,7 +116,7 @@ BEGIN IMAGE
     BEGIN OBJECT
 
       object = sphere
-      center = 0.86 0 -1.5
+      center = 4.0 0 -2.0
       radius = 0.5
 
       BEGIN MATERIAL
