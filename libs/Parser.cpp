@@ -722,14 +722,14 @@ bool parse_camera(Camera *&camera, std::ifstream &input_file, int &line_number){
     bool is_perspective = false;
     bool is_parallel = false;
 
-    //parallel arguments
+    // parallel arguments
     Point3 left, right, top, bottom;
     left = Point3(-1,0,0);
     right = Point3(1,0,0);
     top = Point3(0,1,0);
     bottom = Point3(0,-1,0);
 
-    //perspective arguments
+    // perspective arguments
     double vfov = 90;
     double aspect_ratio = 2;
     double dist_to_focus = 1;
@@ -759,6 +759,7 @@ bool parse_camera(Camera *&camera, std::ifstream &input_file, int &line_number){
                     double x = std::stod(words[2]);
                     double y = std::stod(words[3]);
                     double z = std::stod(words[4]);
+                    
                     look_from = Point3(x,y,z);
                 }
                 else if(words[0] == "look_at"){
