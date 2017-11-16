@@ -1,0 +1,173 @@
+BEGIN IMAGE
+
+  type = ppm
+  codification = binary #could be binary
+  width = 900
+  height = 450
+  maxcolor = 255
+  antialiasing = 32
+
+  BEGIN SHADER
+
+    shader = blinnphong #recursive | normal2rgb | standard | depthmap | blinnphong
+    iterations = 1
+    ambient = true
+    diffuse = true
+    specular = true
+    shadow = true
+
+  END SHADER
+
+  BEGIN CAMERA
+
+    type = perspective
+    
+    look_from = -1.65 0.75 7
+    look_at   = 0.0 0.0 -1.0
+    up = 0.0 1.0 0.0
+    #vp_normal = 0.00 0.00 0.00
+
+    #perspective arguments
+    vfov = 30.0
+    dist_to_focus = 1.0
+    focal_opening = 0
+    aspect_ratio = 2
+
+  END CAMERA
+
+  BEGIN SCENE
+
+    ambient_light = 0.4 0.4 0.4
+
+    BEGIN BACKGROUND
+
+      lower_left  = 0 0.749 1
+      upper_left  = 0 0.749 1
+      lower_right = 0 0.749 1
+      upper_right = 0 0.749 1
+
+    END BACKGROUND
+
+    BEGIN LIGHT
+
+      type = pontual
+      origin = 5 5 5
+      intensity = 1 1 1
+
+    END LIGHT
+
+    BEGIN OBJECT
+
+      object = sphere
+      center = 0 0 0
+      radius = 0.05
+
+      BEGIN MATERIAL
+
+        material = shiny
+        ambient = 0.1 0.1 0.1
+        diffuse = 1 1 1
+        specular = 0 0 0
+        specular_exponent = 64.0
+
+      END MATERIAL
+
+    END OBJECT
+
+    BEGIN OBJECT
+
+      object = sphere
+      center = 0 -100.5 -1
+      radius = 100
+
+      BEGIN MATERIAL
+
+        material = shiny
+        ambient = 0.1 0.1 0.1
+        diffuse = 0.9 0.1 0.1
+        specular = 0 0 0
+        specular_exponent = 64.0
+
+      END MATERIAL
+
+    END OBJECT
+
+    BEGIN OBJECT
+
+      object = triangle
+      v0 = 0 0 -1
+      v1 = 0 0.5 -1
+      v2 = 0.5 0.5 -1
+      culling = false
+
+      BEGIN MATERIAL
+
+        material = shiny
+        ambient = 0.1 0.1 0.1
+        diffuse = 0.0 0.3 0.8
+        specular = 0.9 0.9 0.9
+        specular_exponent = 256.0
+
+      END MATERIAL
+
+    END OBJECT
+
+    BEGIN OBJECT
+
+      object = triangle
+      v0 = 0 0 -1
+      v1 = 0.5 0.5 -0.9
+      v2 = 0 0.5 -1
+      culling = true
+
+      BEGIN MATERIAL
+
+        material = shiny
+        ambient = 0.1 0.1 0.1
+        diffuse = 0.2 1.0 1.0
+        specular = 0.8 0.8 0.6
+        specular_exponent = 256	
+
+      END MATERIAL
+
+    END OBJECT
+
+    BEGIN OBJECT
+
+      object = sphere
+      center = -1 0.5 2
+      radius = 0.5
+
+      BEGIN MATERIAL
+
+        material = shiny
+        ambient = 0.1 0.1 0.1
+        diffuse = 1.0 0.2 1.0
+        specular = 0.8 0.8 0.6
+        specular_exponent = 256	
+
+      END MATERIAL
+
+    END OBJECT
+
+    BEGIN OBJECT
+
+      object = sphere
+      center = -1.5 0.5 3
+      radius = 0.5
+
+      BEGIN MATERIAL
+
+        material = shiny
+        ambient = 0.1 0.1 0.1
+        diffuse = 1.0 1.0 0.2
+        specular = 0.8 0.8 0.6
+        specular_exponent = 256	
+
+      END MATERIAL
+
+    END OBJECT
+
+  END SCENE
+
+END IMAGE

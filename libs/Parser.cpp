@@ -322,11 +322,17 @@ bool parse_object(Hitable *&hitable, std::ifstream &input_file, int &line_number
   Material *material;
   double radius = 1.0;
 
+  // Triangle parameters
+  Point3 vertices[3];
+  int vertices_counter = 0;
+  bool culling = true;
+
   bool has_center = false;
   bool has_radius = false;
   bool has_material = false;
 
   bool is_sphere = false;
+  bool is_triangle = false;
 
   std::string line;
 
@@ -352,6 +358,9 @@ bool parse_object(Hitable *&hitable, std::ifstream &input_file, int &line_number
         if(words.size() == 3 and words[1] == "="){
           if(words[2] == "sphere"){
             is_sphere = true;
+          }
+          else if(words[2] == "triangle"){
+            is_triangle = true;
           }
           else{
             return false;
@@ -379,6 +388,43 @@ bool parse_object(Hitable *&hitable, std::ifstream &input_file, int &line_number
         }
 
       }
+      else if(words[0] == "v0"){
+        if(words.size() == 5 and words[1] == "="){
+          double x = std::stod(words[2]);
+          double y = std::stod(words[3]);
+          double z = std::stod(words[4]);
+          vertices[0] = Point3(x,y,z);
+          vertices_counter++;
+          std::cout << "tem v0" << std::endl;
+                
+        }
+      }
+      else if(words[0] == "v1"){
+        if(words.size() == 5 and words[1] == "="){
+          double x = std::stod(words[2]);
+          double y = std::stod(words[3]);
+          double z = std::stod(words[4]);
+          vertices[1] = Point3(x,y,z);
+          vertices_counter++;
+          std::cout << "tem v1" << std::endl;
+        }
+      }
+      else if(words[0] == "v2"){
+        if(words.size() == 5 and words[1] == "="){
+          double x = std::stod(words[2]);
+          double y = std::stod(words[3]);
+          double z = std::stod(words[4]);
+          vertices[2] = Point3(x,y,z);
+          vertices_counter++;
+          std::cout << "tem v2" << std::endl;
+        }
+      }
+      else if(words[0] == "culling"){
+        if(words.size() == 3 and words[1] == "="){
+            if(!string_to_bool(words[2], culling)) return false;
+          std::cout << "tem culling" << std::endl;
+        }
+      }
       else if(words[0] == "BEGIN"){
         
         if(words.size() == 2){
@@ -405,10 +451,6 @@ bool parse_object(Hitable *&hitable, std::ifstream &input_file, int &line_number
 
         if(words.size() == 2){
           
-          if(!has_center or !has_material){
-            return false;
-          }
-
           if(is_sphere){
           
             if(!has_radius){
@@ -419,6 +461,19 @@ bool parse_object(Hitable *&hitable, std::ifstream &input_file, int &line_number
             num_spheres++;
 
             return (words[1] == "OBJECT") ? true : false;
+          }
+          else if(is_triangle){
+            if(vertices_counter != 3){ 
+                return false; 
+            }
+            
+          std::cout << "tem triangulo" << std::endl;          
+
+            hitable = new Triangle(vertices[0], vertices[1], vertices[2], material, culling);
+            return (words[1] == "OBJECT") ? true : false;
+          }
+          else{
+            return false;
           }
 
         }

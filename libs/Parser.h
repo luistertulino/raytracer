@@ -22,6 +22,7 @@
 #include "shaders/Cel.h"
 
 #include "hitables/Sphere.h"
+#include "hitables/Triangle.h"
 
 #include "lights/Pontual.h"
 #include "lights/Directional.h"
