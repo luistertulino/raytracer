@@ -1,0 +1,105 @@
+BEGIN IMAGE
+
+  type = ppm
+  codification = binary #could be binary
+  width = 900
+  height = 450
+  maxcolor = 255
+  antialiasing = 16
+
+  BEGIN SHADER
+
+    shader = recursive #| normal2rgb | standard | depthmap | blinnphong
+    iterations = 51
+
+  END SHADER
+
+  BEGIN CAMERA
+
+    type = perspective
+    
+    look_from = 0 0 1
+    look_at   = 0.0 0.0 0.0
+    up = 0.0 1.0 0.0
+    #vp_normal = 0.00 0.00 0.00
+
+    #perspective arguments
+    vfov = 70.0
+    dist_to_focus = 1.0
+    focal_opening = 0
+    aspect_ratio = 2
+
+  END CAMERA
+
+  BEGIN SCENE
+
+    ambient_light = 0.1 0.1 0.1
+
+    BEGIN BACKGROUND
+
+      lower_left  = 1.0 1.0 1.0
+      upper_left  = 1 0 0
+      lower_right = 1.0 1.0 1.0
+      upper_right = 1 0 0
+
+    END BACKGROUND
+
+    BEGIN LIGHT
+
+      type = pontual
+      source = 1.0 5.0 3.0
+      intensity = 1.0 1.0 1.0
+
+    END LIGHT
+    
+    BEGIN OBJECT
+
+      object = sphere
+      center = -1.0 0.0 -1.0
+      radius = 0.5
+
+      BEGIN MATERIAL
+
+        material = metal
+        albedo = 0.0 0.3 0.8
+        fuzziness = 0.5
+
+      END MATERIAL
+
+    END OBJECT
+
+    BEGIN OBJECT
+
+      object = sphere
+      center = 0.0 0.0 -1.0
+      radius = 0.5
+
+      BEGIN MATERIAL
+
+        material = dieletric
+        albedo = 1 1 1
+        refraction_index = 1.2
+
+      END MATERIAL
+
+    END OBJECT
+
+    BEGIN OBJECT
+
+      object = sphere
+      center = 0.0 -100.5 -1.0
+      radius = 100
+
+      BEGIN MATERIAL
+
+        material = lambertian
+        ambient = 0.1 0.1 0.1
+        albedo = 0.0 0.5 0.0
+
+      END MATERIAL
+
+    END OBJECT
+
+  END SCENE
+
+END IMAGE

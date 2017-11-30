@@ -139,11 +139,12 @@ bool parse_material(Material *&material, std::ifstream &input_file, int &line_nu
   RGB ambient, diffuse, specular, albedo;
   RGB shadow_color, outline;
 
-  bool is_lambertian, is_shiny, is_metal, is_normal, is_cartoon;
+  bool is_lambertian, is_shiny, is_metal, is_normal, is_cartoon, is_dieletric;
   int specular_exponent = 0;
   double fuzziness = 1.0;
+  double ref_idx = 1.0;
 
-  is_cartoon = is_normal = is_metal = is_lambertian = is_shiny = false;
+  is_cartoon = is_normal = is_metal = is_lambertian = is_shiny = is_dieletric = false;
   ambient = diffuse = specular = albedo = shadow_color = outline = RGB(0);
   
   std::string line = "";
@@ -187,6 +188,9 @@ bool parse_material(Material *&material, std::ifstream &input_file, int &line_nu
           }
           else if(words[2] == "cartoon"){
             is_cartoon = true;
+          }
+          else if(words[2] == "dieletric"){
+            is_dieletric = true;
           }
           else{
             return false;
@@ -283,6 +287,14 @@ bool parse_material(Material *&material, std::ifstream &input_file, int &line_nu
             return false;
           }
         }
+        else if(words[0] == "refraction_index")
+          if (words.size() == 3) {
+            ref_idx = std::stod(words[2]);
+          }
+          else{
+            return false;
+          }
+        }
         else{
           return false;
         }
@@ -304,6 +316,9 @@ bool parse_material(Material *&material, std::ifstream &input_file, int &line_nu
         else if (is_cartoon){
           material = new Cartoon(albedo, shadow_color, outline);
         }
+        else if (is_dieletric){
+          material = new Dieletric(albedo, ref_idx);
+        }        
         else{
           return false;
         }

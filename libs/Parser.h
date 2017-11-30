@@ -13,6 +13,7 @@
 #include "materials/Metal.h"
 #include "materials/Cartoon.h"
 #include "materials/Normal_Material.h"
+#include "materials/Dieletric.h"
 
 #include "shaders/Blinn_Phong.h"
 #include "shaders/Depth_map.h"
