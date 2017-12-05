@@ -40,10 +40,8 @@ bool Scene::hit_anything(const Ray & r, double t_min, double t_max, hit_record &
 	bool hit_anything = false;
 
 	//for each object in the list
-	for (auto i = objects.begin(); i != objects.end(); i++ ) {
-		Hitable *obj = *i;
-
-		//test if the object were hit
+	for (auto obj : objects) {
+		
 	  if(obj->hit(r, t_min, t_max, rec)){
 	    hit_anything = true;
 	    t_max = rec.t; //closest point to the ray origin
@@ -59,9 +57,8 @@ bool Scene::hit_first_object(const Ray &r, hit_record & rec) const{
 	double min_t = 0.0;
 	double max_t = std::numeric_limits<double>::max();
 
-	for(auto i = objects.begin(); i != objects.end(); i++){
-		Hitable *obj = *i;
-
+	for(auto obj : objects){
+		
 		if(obj->hit(r, min_t, max_t, rec)){
 			hit = true;
 			break;

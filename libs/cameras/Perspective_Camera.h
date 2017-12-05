@@ -12,7 +12,7 @@ class Perspective_Camera : public Camera{
     double focal_distance;
     double focal_opening;
 
-    Perspective_Camera( Point3 look_from, Vector3 look_at, Vector3 up,
+    Perspective_Camera( Point3 &look_from, Vector3 &look_at, Vector3 &up,
                         double vfov, double aspec, double dist_to_focus, double ap, Vector3 vp_normal = Vector3(0)) : Camera(look_from,look_at,up){
 
         aspect_ratio = aspec;

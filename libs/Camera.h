@@ -24,7 +24,7 @@ public:
     bool is_orthogonal;
 
 	// Constructors
-	Camera(Point3 look_from, Point3 look_at, Vector3 up){
+	Camera(Point3 &look_from, Point3 &look_at, Vector3 &up){
 		frame.w = unit_vector(look_from - look_at);
 	    frame.u = unit_vector(cross(up, frame.w));
 	    frame.v = unit_vector(cross(frame.w,  frame.u));

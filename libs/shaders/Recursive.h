@@ -33,12 +33,14 @@ public:
 
     if(scene.hit_anything(ray, min_t, max_t, rec)){
 
+      /*
       Dieletric *d = dynamic_cast<Dieletric*>(rec.material);
 
-      /*if (d != NULL)
+      if (d != NULL)
       {
         std::cout << "Dieletric material \n";
-      }*/
+      }
+      */
 
       if(actual_iteration > 0){ //para chamadas recursivas
         // creates new ray with origin on point that was hit (with a slight add of 0.1 for evading
