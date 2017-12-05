@@ -55,7 +55,7 @@ BEGIN IMAGE
     BEGIN OBJECT
 
       object = sphere
-      center = -1.0 0.0 -1.0
+      center = 1.0 0.0 -1.0
       radius = 0.5
 
       BEGIN MATERIAL
