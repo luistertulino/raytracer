@@ -2,8 +2,8 @@ BEGIN IMAGE
 
   type = ppm
   codification = binary #could be binary
-  width = 900
-  height = 450
+  width = 1000
+  height = 500
   maxcolor = 255
   antialiasing = 16
 
@@ -21,7 +21,7 @@ BEGIN IMAGE
     look_from = 0 0 1
     look_at   = 0.0 0.0 0.0
     up = 0.0 1.0 0.0
-    #vp_normal = 0.00 0.00 0.00
+    vp_normal = 0.00 0.00 0.00
 
     #perspective arguments
     vfov = 70.0
@@ -38,9 +38,9 @@ BEGIN IMAGE
     BEGIN BACKGROUND
 
       lower_left  = 1.0 1.0 1.0
-      upper_left  = 1 0 0
+      upper_left  = 0.5 0.7 1
       lower_right = 1.0 1.0 1.0
-      upper_right = 1 0 0
+      upper_right = 0.5 0.7 1
 
     END BACKGROUND
 
@@ -61,8 +61,8 @@ BEGIN IMAGE
       BEGIN MATERIAL
 
         material = metal
-        albedo = 0.0 0.3 0.8
-        fuzziness = 0.5
+        albedo = 0.8 0.6 0.2
+        fuzziness = 0.4
 
       END MATERIAL
 
@@ -76,9 +76,9 @@ BEGIN IMAGE
 
       BEGIN MATERIAL
 
-        material = dieletric
-        albedo = 1 1 1
-        refraction_index = 1.2
+        material = lambertian
+        ambient = 0.1 0.1 0.1
+        albedo = 0.2 0.2 0.5
 
       END MATERIAL
 
@@ -94,7 +94,39 @@ BEGIN IMAGE
 
         material = lambertian
         ambient = 0.1 0.1 0.1
-        albedo = 0.0 0.5 0.0
+        albedo = 0.8 0.8 0.0
+
+      END MATERIAL
+
+    END OBJECT
+
+    BEGIN OBJECT
+
+      object = sphere
+      center = -1.0 0.0 -1.0
+      radius = 0.5
+
+      BEGIN MATERIAL
+
+        material = dieletric
+        refraction_index = 1.5
+        albedo = 1 1 1
+
+      END MATERIAL
+
+    END OBJECT
+
+    BEGIN OBJECT
+
+      object = sphere
+      center = -1.0 0.0 -1.0
+      radius = -0.45
+      
+      BEGIN MATERIAL
+
+        material = dieletric
+        refraction_index = 1.5
+        albedo = 1 1 1
 
       END MATERIAL
 

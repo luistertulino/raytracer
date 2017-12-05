@@ -170,10 +170,10 @@ bool parse_material(Material *&material, std::ifstream &input_file, int &line_nu
 
         // Decodes the material
         if(words[0] == "material"){
+
           if(is_lambertian or is_shiny or is_metal or is_normal or is_cartoon){
             return false;
           }
-
           if(words[2] == "lambertian"){
             is_lambertian = true;
           }
@@ -287,7 +287,7 @@ bool parse_material(Material *&material, std::ifstream &input_file, int &line_nu
             return false;
           }
         }
-        else if(words[0] == "refraction_index")
+        else if(words[0] == "refraction_index"){
           if (words.size() == 3) {
             ref_idx = std::stod(words[2]);
           }

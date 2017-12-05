@@ -2,6 +2,7 @@
 #define RECURSIVE_H_
 
 #include "../Shader.h"
+#include "../materials/Dieletric.h"
 #include <random>
 #include <algorithm>
 
@@ -32,6 +33,13 @@ public:
 
     if(scene.hit_anything(ray, min_t, max_t, rec)){
 
+      Dieletric *d = dynamic_cast<Dieletric*>(rec.material);
+
+      /*if (d != NULL)
+      {
+        std::cout << "Dieletric material \n";
+      }*/
+
       if(actual_iteration > 0){ //para chamadas recursivas
         // creates new ray with origin on point that was hit (with a slight add of 0.1 for evading
         // collision inside the sphere), and the direction is the target vector;
@@ -51,22 +59,6 @@ public:
           //get mean of the colors from this "antialiasing"
           rgb_to_paint /= 30;
         }
-
-        // now, for each pontual light, we have to get the light action on the object
-        // for(auto light = scene.lights.begin(); light != scene.lights.end(); light++){
-        //
-        //   // Here we create a vector in the direction of the light, from the point hit
-        //   Vector3 unit_light = unit_vector(light->source - rec.p);
-        //
-        //   //calculate the cossene with the normal of that point
-        //   double cos_light_normal = dot(unit_light, rec.normal);
-        //   cos_light_normal = std::max(0.0, cos_light_normal); //cos < 0 means the light did not hit surface
-        //
-        //     // then we sum the color with the light intensity applyed to the
-        //     // diffuse coefficient, applyed to the conssene we found
-        //   rgb_to_paint += cos_light_normal * light->intensity * rec.material->k_d * use_diffuse;
-        // }
-
 
         // sums with the recursive call applied to the diffuse coeficient
         Ray scattered;
