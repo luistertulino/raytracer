@@ -1,0 +1,208 @@
+BEGIN IMAGE
+
+  type = ppm
+  codification = binary #could be binary
+  width = 1000
+  height = 500
+  maxcolor = 255
+  antialiasing = 16
+
+  BEGIN SHADER
+
+    shader = recursive #| normal2rgb | standard | depthmap | blinnphong
+    iterations = 51
+
+  END SHADER
+
+  BEGIN CAMERA
+
+    type = perspective
+    
+    look_from = 0 0 1
+    look_at   = 0.0 0.0 0.0
+    up = 0.0 1.0 0.0
+    vp_normal = 0.00 0.00 0.00
+
+    #perspective arguments
+    vfov = 70.0
+    dist_to_focus = 1.0
+    focal_opening = 0
+    aspect_ratio = 2
+
+  END CAMERA
+
+  BEGIN TEXTURE
+    ID = blue_texture
+    type = solid
+    color = 0.2 0.2 0.5
+  END TEXTURE
+
+  BEGIN TEXTURE
+    ID = red_texture
+    type = solid
+    color = 0.5 0.2 0.2
+  END TEXTURE
+
+  BEGIN TEXTURE
+    ID = white_texture
+    type = solid
+    color = 1 1 1
+  END TEXTURE
+
+  BEGIN TEXTURE
+    ID =  red_and_blue
+    type = checker
+    odd_texture = blue_texture
+    even_texture = red_texture
+  END TEXTURE
+
+  BEGIN TEXTURE
+    ID = white_noise_texture
+    type = noise
+    color = 1 1 1
+    scale = 4
+  END TEXTURE
+
+  BEGIN TEXTURE
+    ID = gray_noise_texture
+    type = noise
+    color = 0.5 0.5 0.5
+    scale = 4
+  END TEXTURE
+
+  BEGIN SCENE
+
+    ambient_light = 0.1 0.1 0.1
+
+    BEGIN BACKGROUND
+
+      lower_left  = 1.0 1.0 1.0
+      upper_left  = 0.5 0.7 1
+      lower_right = 1.0 1.0 1.0
+      upper_right = 0.5 0.7 1
+
+    END BACKGROUND
+
+    BEGIN LIGHT
+
+      type = pontual
+      source = 1.0 5.0 3.0
+      intensity = 1.0 1.0 1.0
+
+    END LIGHT
+    
+    BEGIN OBJECT
+
+      object = sphere
+      center = 1.0 0.0 -1.0
+      radius = 0.5
+
+      BEGIN MATERIAL
+
+        material = metal
+        texture = white_texture
+        fuzziness = 0.4
+
+      END MATERIAL
+
+    END OBJECT
+
+    BEGIN OBJECT
+
+      object = sphere
+      center = 0.0 0.0 -1.0
+      radius = 0.5
+
+      BEGIN MATERIAL
+
+        material = lambertian
+        ambient = 0.1 0.1 0.1
+        texture = blue_texture
+
+      END MATERIAL
+
+    END OBJECT
+
+    BEGIN OBJECT
+
+      object = sphere
+      center = 0.0 -100.5 -1.0
+      radius = 100
+
+      BEGIN MATERIAL
+
+        material = lambertian
+        ambient = 0.1 0.1 0.1
+        texture = red_and_blue
+
+      END MATERIAL
+
+    END OBJECT
+
+    BEGIN OBJECT
+
+      object = sphere
+      center = -1.0 0.0 -1.0
+      radius = 0.5
+
+      BEGIN MATERIAL
+
+        material = dieletric
+        refraction_index = 1.5
+        texture = white_texture
+
+      END MATERIAL
+
+    END OBJECT
+
+    BEGIN OBJECT
+
+      object = sphere
+      center = -1.0 1.0 -1.0
+      radius = 0.25
+
+      BEGIN MATERIAL
+
+        material = lambertian
+        ambient = 0.1 0.1 0.1
+        texture = white_noise_texture
+
+      END MATERIAL
+
+    END OBJECT
+
+    BEGIN OBJECT
+
+      object = sphere
+      center = 0.0 1.0 -1.0
+      radius = 0.25
+
+      BEGIN MATERIAL
+
+        material = lambertian
+        ambient = 0.1 0.1 0.1
+        texture = red_texture
+
+      END MATERIAL
+
+    END OBJECT
+
+    BEGIN OBJECT
+
+      object = sphere
+      center = 1.0 1.0 -1.0
+      radius = 0.25
+
+      BEGIN MATERIAL
+
+        material = lambertian
+        ambient = 0.1 0.1 0.1
+        texture = gray_noise_texture
+
+      END MATERIAL
+
+    END OBJECT
+
+  END SCENE
+
+END IMAGE

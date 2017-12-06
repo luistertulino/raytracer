@@ -6,6 +6,7 @@
 class Normal_Material : public Material{
 public:
   Normal_Material():Material(){};
+  
   bool scatter(const Ray &ray_in, const hit_record &rec, Ray &scattered) const override;
 };
 

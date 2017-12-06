@@ -10,6 +10,7 @@
 #include "../libs/Image.h"
 #include "../libs/Shader.h"
 #include "../libs/Light.h"
+#include "../libs/Texture.h"
 using namespace utility;
 
 int main(int argc, char const *argv[])

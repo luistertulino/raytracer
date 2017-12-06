@@ -1,5 +1,7 @@
 #include "Parser.h"
 
+std::map<std::string, Texture*> textures;
+
 bool is_blinn_phong, is_depth_map, is_normal_to_rgb, is_recursive, is_standard, is_cel;
 bool shadow;
 int iterations;
@@ -133,6 +135,130 @@ bool parse_antialiasing(std::vector< std::string > &words, int &antialiasing){
   return false;
 }
 
+bool parse_texture(std::ifstream &input_file, int &line_number){
+  Texture *texture;
+  RGB color(0);
+  Texture *t1, *t2;
+  t1 = new Solid(color);
+  t2 = new Solid(color);
+  texture = new Solid(color);
+  double scale = 1;
+
+  bool is_solid, is_checker, is_noise; 
+  is_solid = is_checker = is_noise = false;
+
+  std::string id = "";
+  bool has_id = false;
+
+  std::string line = "";
+
+  while (std::getline(input_file, line, '\n')) {
+
+    line_number++;
+
+    clean_up(line);
+
+    if(!line.empty()){
+
+      std::vector< std::string > words;
+
+      std::string delimiter = " ";
+
+      split_string(line, delimiter, words);
+
+      if(words[1] == "="){
+
+        if(words[0] == "type"){
+          if(is_solid or is_checker or is_noise){
+            return false;
+          }
+
+          if(words[2] == "solid"){
+            is_solid = true;
+          }
+          else if(words[2] == "checker"){
+            is_checker = true;
+          }
+          else if(words[2] == "noise"){
+            is_noise = true;
+          }
+          /*else if(words[2] == "image"){
+            is_image = true;
+          }*/
+          else{
+            return false;
+          }
+        }
+        else if (words[0] == "ID"){
+          id = words[2];
+          has_id = true;
+        }
+        else if(words[0] == "color"){
+
+          if(words.size() == 5){
+            double r = std::stod(words[2]);
+            double g = std::stod(words[3]);
+            double b = std::stod(words[4]);
+            color = RGB(r,g,b);
+          }
+          else{
+            return false;
+          }
+        }
+        else if(words[0] == "odd_texture"){
+          auto it = textures.find(words[2]);
+          if(it == textures.end()){
+            std::cerr << "texture " << words[2] << " not found" << '\n';
+            return false;
+          }
+          t2 = it->second;
+        }
+        else if(words[0] == "even_texture"){
+          auto it = textures.find(words[2]);
+          if(it == textures.end()){
+            std::cerr << "texture " << words[2] << " not found" << '\n';
+            return false;
+          }
+          t1 = it->second;
+        }
+        else if(words[0] == "scale"){
+          scale = std::stod(words[2]);
+        }
+        else{
+          return false;
+        }
+      }
+      else if(words[0] == "END"){
+        if(!has_id){
+          std::cerr << "texture without id" << '\n';
+          return false;
+        }
+        if(is_solid){
+          texture = new Solid(color);
+        }
+        else if(is_checker){
+          texture = new Checker(t1, t2);
+        }
+        else if (is_noise){
+          texture = new Noise(color, scale);
+        }
+        /*else if (is_image){
+
+        }*/
+        else{
+          return false;
+        }
+        textures.emplace(id, texture);
+        return (words[1] == "TEXTURE") ? true : false;
+      }
+      else{
+        return false;
+      }
+    }
+  }
+  return false;
+}
+
 
 bool parse_material(Material *&material, std::ifstream &input_file, int &line_number){
 
@@ -146,6 +272,10 @@ bool parse_material(Material *&material, std::ifstream &input_file, int &line_nu
 
   is_cartoon = is_normal = is_metal = is_lambertian = is_shiny = is_dieletric = false;
   ambient = diffuse = specular = albedo = shadow_color = outline = RGB(0);
+
+  std::string id = "";
+  Texture *texture = new Solid();
+
   
   std::string line = "";
 
@@ -154,7 +284,6 @@ bool parse_material(Material *&material, std::ifstream &input_file, int &line_nu
     line_number++;
 
     clean_up(line);
-    // std::cout << line <<std::endl;
 
     if(!line.empty()){
 
@@ -195,6 +324,15 @@ bool parse_material(Material *&material, std::ifstream &input_file, int &line_nu
           else{
             return false;
           }
+        }
+        // Decodes the texture of the material
+        else if(words[0] == "texture"){
+          auto it = textures.find(words[2]);
+          if(it == textures.end()){
+            std::cerr << "texture not found" << '\n';
+            return false;
+          }
+          texture = it->second;
         }
         // Decodes the ambient light
         else if(words[0] == "ambient"){
@@ -302,22 +440,22 @@ bool parse_material(Material *&material, std::ifstream &input_file, int &line_nu
       // Creates the appropriate material
       else if(words[0] == "END"){
         if(is_lambertian){
-          material = new Lambertian(ambient, albedo);
+          material = new Lambertian(ambient, texture);
         }
         else if(is_shiny){
-          material = new Shiny(ambient, diffuse, specular, specular_exponent);
+          material = new Shiny(texture, ambient, specular, specular_exponent);
         }
         else if (is_metal){
-          material = new Metal(albedo, fuzziness);
+          material = new Metal(texture, fuzziness);
         }
         else if (is_normal){
           material = new Normal_Material();
         }
         else if (is_cartoon){
-          material = new Cartoon(albedo, shadow_color, outline);
+          material = new Cartoon(texture, shadow_color, outline);
         }
         else if (is_dieletric){
-          material = new Dieletric(albedo, ref_idx);
+          material = new Dieletric(texture, ref_idx);
         }        
         else{
           return false;
@@ -1261,6 +1399,11 @@ bool parse_image(Image &image, Shader *&shader, std::ifstream &input_file, int &
             return false;
           }
 
+        }
+        else if(words[1] == "TEXTURE"){
+          if(!parse_texture(input_file, line_number)){
+            return false;
+          }
         }
       }
       else if(words[0] == "END"){

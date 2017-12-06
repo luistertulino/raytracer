@@ -1,3 +1,6 @@
+#ifndef CHECKER_H_
+#define CHECKER_H_
+
 #include "../Texture.h"
 
 #include <cmath>
@@ -12,12 +15,12 @@ class Checker : public Texture{
         odd  = t1;
     }
 
-    virtual Vector3 value(float u, float v, const Vector3 &p) const override;
+    virtual RGB value(double u, double v, const Point3 &p) const override;
     
 };
 
-Vector3 Checker::value(float u, float v, const Vector3 &p) const {
-    float sines = sin(10 * p.X()) * sin(10 * p.Y()) * sin(10 * p.Z()); 
+RGB Checker::value(double u, double v, const Point3 &p) const {
+    float sines = sin(10 * p.x()) * sin(10 * p.y()) * sin(10 * p.z()); 
 
     if (sines < 0)
     {
@@ -27,3 +30,5 @@ Vector3 Checker::value(float u, float v, const Vector3 &p) const {
         return even->value(u, v, p);
     }
 }
+
+#endif

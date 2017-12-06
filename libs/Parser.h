@@ -2,11 +2,16 @@
 #define PARSER_H_
 #include <string>
 #include <fstream>
+#include <map>
 
 #include "Image.h"
 
 #include "cameras/Parallel_Camera.h"
 #include "cameras/Perspective_Camera.h"
+
+#include "textures/Solid.h"
+#include "textures/Checker.h"
+#include "textures/Noise.h"
 
 #include "materials/Lambertian.h"
 #include "materials/Shiny.h"

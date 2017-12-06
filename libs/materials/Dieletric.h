@@ -12,11 +12,19 @@ public:
 
   Dieletric():Material(){ ref_idx = 1.0; }
 
-  Dieletric(RGB &color):Material(color){
+  /*Dieletric(RGB &color):Material(color){
     ref_idx = 1.0;
   }
 
   Dieletric(RGB &color, double ref_idx_):Material(color){
+    ref_idx = ref_idx_;
+  }*/
+
+  Dieletric(Texture *t):Material(t){
+    ref_idx = 1.0;
+  }
+
+  Dieletric(Texture *t, double ref_idx_):Material(t){
     ref_idx = ref_idx_;
   }
 

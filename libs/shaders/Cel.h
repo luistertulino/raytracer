@@ -61,7 +61,7 @@ RGB Cel::shade(const Ray &ray, Scene &scene) const{
 
         if(scene.is_shadow(new_origin, light, light_direction)){
           rgb_to_paint += cartoon->shadow;
-          // rgb_to_paint += RGB(0,1,0);
+
           continue;
         }
 
@@ -70,12 +70,13 @@ RGB Cel::shade(const Ray &ray, Scene &scene) const{
         for(double interval : shading_intervals){
 
           double cos_interval = std::cos(interval * M_PI/180);
+          double u, v; u = v = 0.0; // This will change
 
           if(cos_light_normal >= cos_interval){
 
             if(cos_interval > max_cos){
               max_cos = cos_interval;
-              rgb_to_paint = cartoon->albedo * max_cos * light->get_intensity();
+              rgb_to_paint = cartoon->color(u, v, rec.p) * max_cos * light->get_intensity();
               break;
             }
 
@@ -84,7 +85,7 @@ RGB Cel::shade(const Ray &ray, Scene &scene) const{
             
             if(cos_interval > max_cos){
               max_cos = cos_interval;
-              rgb_to_paint = cartoon->albedo * max_cos * light->get_intensity();
+              rgb_to_paint = cartoon->color(u, v, rec.p) * max_cos * light->get_intensity();
             }
 
           }
@@ -97,7 +98,6 @@ RGB Cel::shade(const Ray &ray, Scene &scene) const{
     }
     else{
       rgb_to_paint = cartoon->outline;
-      // rgb_to_paint = RGB(0,0,1);
     }
   }
   else{

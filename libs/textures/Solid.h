@@ -1,18 +1,25 @@
+#ifndef SOLID_H_
+#define SOLID_H_
+
 #include "../Texture.h"
 
 class Solid : public Texture{
   public:
-    Vector3 color;
+    RGB color;
 
-    Solid();
-    Solid(Vector3 &c){
+    Solid(){
+    	color = RGB(0.0);
+    }
+    Solid(RGB &c){
         color = c;
     }
 
-    virtual Vector3 value(float u, float v, const Vector3 &p) const override;
+    virtual RGB value(double u, double v, const Point3 &p) const override;
     
 };
 
-Vector3 Solid::value(float u, float v, const Vector3 &p) const {
+RGB Solid::value(double u, double v, const Point3 &p) const {
     return color;
 }
+
+#endif
