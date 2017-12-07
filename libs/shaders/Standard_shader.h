@@ -23,8 +23,8 @@ RGB Standard_shader::shade(const Ray &ray, Scene &scene) const {
   //if hit an object
   if(scene.hit_anything(ray, min_t, max_t, rec)){
 
-    double u, v; u = v = 0.0; //This will change
-    rgb_to_paint = rec.material->color(u, v, rec.p);
+    //double u, v; u = v = 0.0; //This will change
+    rgb_to_paint = rec.material->color(rec.u, rec.v, rec.p);
   }
   else{
     rgb_to_paint = interpolate_background(ray, scene.get_background());

@@ -1,5 +1,7 @@
 #include "Sphere.h"
-bool Sphere::hit(const Ray & r, double t_min, double t_max, hit_record & rec) const {
+#include <cmath>
+
+bool Sphere::hit(const Ray &r, double t_min, double t_max, hit_record &rec) const {
 
     //bhaskara to see if the ray collides with the sphere
 
@@ -25,6 +27,7 @@ bool Sphere::hit(const Ray & r, double t_min, double t_max, hit_record & rec) co
             rec.p = r.point_at(t1);
             rec.normal = unit_vector((rec.p - center)/radius);
             rec.material = material;
+            get_u_v(rec.u, rec.v, rec.normal);
             return true;
             }
         }
@@ -33,8 +36,22 @@ bool Sphere::hit(const Ray & r, double t_min, double t_max, hit_record & rec) co
             rec.p = r.point_at(t2);
             rec.normal = unit_vector((rec.p - center)/radius);
             rec.material = material;
+            get_u_v(rec.u, rec.v, rec.normal);
             return true;
         }
+
+        
+
     }
     return false; //if not hit sphere, or sphere is behind ray origin
 };
+
+void Sphere::get_u_v(double &u, double &v, const Point3 &p) const {
+    //Point3 p_scaled = (p - center)/radius;
+    
+    double phi = atan2(p.z(), p.x());
+    double theta = asin(p.y());
+
+    u = 1 - (phi + M_PI) / (2 * M_PI);
+    v = (theta + M_PI/2) / M_PI;
+}

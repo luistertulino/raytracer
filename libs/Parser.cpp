@@ -143,9 +143,10 @@ bool parse_texture(std::ifstream &input_file, int &line_number){
   t2 = new Solid(color);
   texture = new Solid(color);
   double scale = 1;
+  std::string path = "";
 
-  bool is_solid, is_checker, is_noise; 
-  is_solid = is_checker = is_noise = false;
+  bool is_solid, is_checker, is_noise, is_image; 
+  is_solid = is_checker = is_noise = is_image = false;
 
   std::string id = "";
   bool has_id = false;
@@ -182,9 +183,9 @@ bool parse_texture(std::ifstream &input_file, int &line_number){
           else if(words[2] == "noise"){
             is_noise = true;
           }
-          /*else if(words[2] == "image"){
+          else if(words[2] == "image"){
             is_image = true;
-          }*/
+          }
           else{
             return false;
           }
@@ -224,6 +225,12 @@ bool parse_texture(std::ifstream &input_file, int &line_number){
         else if(words[0] == "scale"){
           scale = std::stod(words[2]);
         }
+        else if (words[0] == "path"){
+          if (words.size() == 3)
+          {
+            path = words[2];
+          }
+        }
         else{
           return false;
         }
@@ -242,9 +249,9 @@ bool parse_texture(std::ifstream &input_file, int &line_number){
         else if (is_noise){
           texture = new Noise(color, scale);
         }
-        /*else if (is_image){
-
-        }*/
+        else if (is_image){
+          texture = new Image_Texture(path);
+        }
         else{
           return false;
         }

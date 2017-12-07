@@ -10,6 +10,7 @@ struct hit_record {
   Point3  p; //the point that was hit
   Vector3 normal; //the normal of the point in relation to the object
 	Material *material; //the material that was hit
+  double u, v; 
 };
 
 class Material {

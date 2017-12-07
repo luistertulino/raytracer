@@ -62,8 +62,8 @@ RGB Blinn_Phong::shade(const Ray &ray, Scene &scene) const {
 
         RGB diffuse_intensity = light->get_intensity() * cos_light_normal;
 
-        double u, v; u = v = 0.0; //This will change
-        rgb_to_paint += rec.material->color(u, v, rec.p) * diffuse_intensity * use_diffuse;
+        //double u, v; u = v = 0.0; //This will change
+        rgb_to_paint += rec.material->color(rec.u, rec.v, rec.p) * diffuse_intensity * use_diffuse;
 
         // Vector3 vdir = unit_vector(ray.get_origin() - rec.p); // = -ray.get_direction
         if(shiny != nullptr){

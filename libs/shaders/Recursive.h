@@ -37,7 +37,7 @@ public:
         // creates new ray with origin on point that was hit (with a slight add of 0.1 for evading
         // collision inside the sphere), and the direction is the target vector;
 
-        double u, v; u = v = 0.0; //This will change
+        //double u, v; u = v = 0.0; //This will change
 
         // gets the ambient light applied to the ambient coefficient of the material
         //for the first iteration we do kind of an antialiasing for the color
@@ -49,7 +49,7 @@ public:
             // use_diffuse is 1 if this shader use the diffuse coefficient;
             Ray scattered;
             rec.material->scatter(ray, rec, scattered);
-            rgb_to_paint += rec.material->color(u, v, rec.p) * shade(scattered, scene, actual_iteration - 1);
+            rgb_to_paint += rec.material->color(rec.u, rec.v, rec.p) * shade(scattered, scene, actual_iteration - 1);
           }
           //get mean of the colors from this "antialiasing"
           rgb_to_paint /= 30;
@@ -58,7 +58,7 @@ public:
         // sums with the recursive call applied to the diffuse coeficient
         Ray scattered;
         rec.material->scatter(ray, rec, scattered);
-        rgb_to_paint += rec.material->color(u, v, rec.p) * shade(scattered, scene, actual_iteration - 1);
+        rgb_to_paint += rec.material->color(rec.u, rec.v, rec.p) * shade(scattered, scene, actual_iteration - 1);
 
       }
       else{ // the number of iterations hits it's maximum

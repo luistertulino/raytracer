@@ -1,6 +1,10 @@
 #ifndef SPHERE_H_
 #define SPHERE_H_
 
+#ifndef M_PI
+    #define M_PI 3.14159265358979323846
+#endif
+
 #include "../Hitable.h"
 #include "../materials/Lambertian.h"
 class Sphere : public Hitable{
@@ -26,6 +30,7 @@ public:
     double get_radius(){return radius;}
 
     virtual bool hit( const Ray & r, double t_min, double t_max, hit_record & rec) const;
+    virtual void get_u_v(double &u, double &v, const Point3 &p) const;
 };
 
 #include "Sphere.cpp"

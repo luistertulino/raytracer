@@ -12,6 +12,7 @@
 #include "textures/Solid.h"
 #include "textures/Checker.h"
 #include "textures/Noise.h"
+#include "textures/Image_Texture.h"
 
 #include "materials/Lambertian.h"
 #include "materials/Shiny.h"
