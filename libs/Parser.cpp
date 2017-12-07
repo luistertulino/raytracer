@@ -627,7 +627,7 @@ bool parse_object(Hitable *&hitable, std::ifstream &input_file, int &line_number
                 return false; 
             }
             
-          std::cout << "tem triangulo" << std::endl;          
+            //std::cout << "tem triangulo" << std::endl;          
 
             hitable = new Triangle(vertices[0], vertices[1], vertices[2], material, culling);
             return (words[1] == "OBJECT") ? true : false;
